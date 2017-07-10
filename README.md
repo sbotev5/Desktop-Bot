@@ -5,3 +5,5 @@ This is a simple task I wanted to do in my spare time and for practice while try
 
 Upon launching, the program creates a GUI that the user uses to record his/her actions - mouse click, keyboard press, mouse pointer movements. After recording, the set of actions are saved in a set of recordings wtih a specific time at which it will be executed. The program checks if it is time for execution (using local time).
 
+Jar file (for demo) and source code included.
+
