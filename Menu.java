@@ -125,6 +125,10 @@ public class Menu extends JFrame {
 
                 howManyKeyPresses++;
 
+            } else if (entry.getKey().contains("KeyCombo")) {
+
+                howManyKeyPresses += 2;
+
             } else if (entry.getKey().contains("MouseButton")) {
 
                 howManyMouseClicks++;
@@ -151,7 +155,7 @@ public class Menu extends JFrame {
 
                 holdButton = false;
 
-                robot.delay(5);
+                robot.delay(3);
 
             } else if (entry.getKey().contains("KeyBoard")) {
 
@@ -204,7 +208,27 @@ public class Menu extends JFrame {
                 Point point = (Point) entry.getValue();
                 robot.mouseMove((int) point.getX(), (int) point.getY());
 
-                robot.delay(5);
+                robot.delay(3);
+
+            } else if ((entry.getKey().contains("KeyCombo"))) {
+
+                try {
+
+                    int[] keyCombo = (int[]) entry.getValue();
+
+                    robot.keyPress(keyCombo[0]);
+                    robot.keyPress(keyCombo[1]);
+
+                    robot.keyRelease(keyCombo[1]);
+                    robot.keyRelease(keyCombo[0]);
+
+                    holdButton = false;
+
+                    robot.delay(500);
+
+                } catch (Exception e) {
+                    System.out.println("Keyboard combo not recognized");
+                }
             }
         }
     }
