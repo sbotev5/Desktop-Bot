@@ -21,10 +21,10 @@ public class Menu extends JFrame {
     public static LinkedHashMap<String, Object> userMovements;
     public static ArrayList<LinkedHashMap<String, Object>> saveUserMovements;
     public static HashMap<UUID, JPanel> updateGUI;
-    public static int mousePressCounter = 0;
-    public static int keyPressCounter = 0;
-    public static int mouseMoveCounter = 0;
-    public static int mouseDragCounter = 0;
+    public static int diffMousePress = 0;
+    public static int diffKeyPress = 0;
+    public static int diffMouseMove = 0;
+
     private Robot robot;
 
     public Menu(Robot robot) {
@@ -218,7 +218,7 @@ public class Menu extends JFrame {
 
                     robot.keyPress(keyCombo[0]);
                     robot.keyPress(keyCombo[1]);
-
+                    robot.delay(500);
                     robot.keyRelease(keyCombo[1]);
                     robot.keyRelease(keyCombo[0]);
 
@@ -274,7 +274,7 @@ public class Menu extends JFrame {
 
             Font font2 = new Font("Spinner", Font.BOLD, 50);
 
-            nameOfRec.setFont(font);
+            nameOfRec.setFont(font2);
 
             hour.setFont(font2);
             minute.setFont(font2);
@@ -448,7 +448,13 @@ public class Menu extends JFrame {
 
                             setExtendedState(JFrame.ICONIFIED);
 
+                            record.setEnabled(false);
+                            stopRecord.setEnabled(false);
+
                             executeMovements(forCheck);
+
+                            record.setEnabled(true);
+                            stopRecord.setEnabled(true);
 
                             listIT.remove();
 

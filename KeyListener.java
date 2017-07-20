@@ -22,8 +22,8 @@ public class KeyListener implements NativeKeyListener {
                 System.out.println(keyCombo[0]);
                 System.out.println(keyCombo[1]);
 
-                Menu.userMovements.put("KeyCombo" + Menu.keyPressCounter, keyCombo);
-                Menu.keyPressCounter++;
+                Menu.userMovements.put("KeyCombo" + Menu.diffKeyPress, keyCombo);
+                Menu.diffKeyPress++;
                 comboAdded = true;
                 lastKey = -1;
 
@@ -41,8 +41,8 @@ public class KeyListener implements NativeKeyListener {
 
             } else {
 
-                Menu.userMovements.put("KeyBoard" + Menu.keyPressCounter, lastKey);
-                Menu.keyPressCounter++;
+                Menu.userMovements.put("KeyBoard" + Menu.diffKeyPress, lastKey);
+                Menu.diffKeyPress++;
                 lastKey = -1;
 
             }
