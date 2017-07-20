@@ -216,11 +216,12 @@ public class Menu extends JFrame {
 
                     int[] keyCombo = (int[]) entry.getValue();
 
-                    robot.keyPress(keyCombo[0]);
-                    robot.keyPress(keyCombo[1]);
+                    robot.keyPress(Main.keyboard.get(keyCombo[0]));
                     robot.delay(500);
-                    robot.keyRelease(keyCombo[1]);
-                    robot.keyRelease(keyCombo[0]);
+                    robot.keyPress(Main.keyboard.get(keyCombo[1]));
+
+                    robot.keyRelease(Main.keyboard.get(keyCombo[1]));
+                    robot.keyRelease(Main.keyboard.get(keyCombo[0]));
 
                     holdButton = false;
 
