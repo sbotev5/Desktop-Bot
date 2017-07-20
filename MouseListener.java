@@ -19,8 +19,8 @@ public class MouseListener implements NativeMouseInputListener {
 
         if (Menu.shouldRecord) {
 
-            Menu.userMovements.put("MouseButton" + Menu.mousePressCounter, e.getButton());
-            Menu.mousePressCounter++;
+            Menu.userMovements.put("MouseButton" + Menu.diffMousePress, e.getButton());
+            Menu.diffMousePress++;
 
         }
     }
@@ -29,8 +29,8 @@ public class MouseListener implements NativeMouseInputListener {
 
         if (Menu.shouldRecord) {
 
-            Menu.userMovements.put("MouseMove" + Menu.mouseMoveCounter, new Point(e.getX(), e.getY()));
-            Menu.mouseMoveCounter++;
+            Menu.userMovements.put("MouseMove" + Menu.diffMouseMove, new Point(e.getX(), e.getY()));
+            Menu.diffMouseMove++;
 
         }
 
@@ -39,8 +39,8 @@ public class MouseListener implements NativeMouseInputListener {
     public void nativeMouseDragged(NativeMouseEvent e) {
         if (Menu.shouldRecord) {
 
-            Menu.userMovements.put("MouseDrag" + Menu.mouseDragCounter, new Point(e.getX(), e.getY()));
-            Menu.mouseDragCounter++;
+            Menu.userMovements.put("MouseDrag" + Menu.diffMouseMove, new Point(e.getX(), e.getY()));
+            Menu.diffMouseMove++;
 
         }
     }

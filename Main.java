@@ -88,6 +88,7 @@ public class Main {
         keyboard.put(51, KeyEvent.VK_COMMA);
         keyboard.put(52, KeyEvent.VK_PERIOD);
         keyboard.put(53, KeyEvent.VK_SLASH);
+        keyboard.put(56, KeyEvent.VK_ALT);
         keyboard.put(57, KeyEvent.VK_SPACE);
         keyboard.put(3639, KeyEvent.VK_PRINTSCREEN);
 

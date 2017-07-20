@@ -21,10 +21,10 @@ public class Menu extends JFrame {
     public static LinkedHashMap<String, Object> userMovements;
     public static ArrayList<LinkedHashMap<String, Object>> saveUserMovements;
     public static HashMap<UUID, JPanel> updateGUI;
-    public static int mousePressCounter = 0;
-    public static int keyPressCounter = 0;
-    public static int mouseMoveCounter = 0;
-    public static int mouseDragCounter = 0;
+    public static int diffMousePress = 0;
+    public static int diffKeyPress = 0;
+    public static int diffMouseMove = 0;
+
     private Robot robot;
 
     public Menu(Robot robot) {
@@ -125,6 +125,10 @@ public class Menu extends JFrame {
 
                 howManyKeyPresses++;
 
+            } else if (entry.getKey().contains("KeyCombo")) {
+
+                howManyKeyPresses += 2;
+
             } else if (entry.getKey().contains("MouseButton")) {
 
                 howManyMouseClicks++;
@@ -151,7 +155,7 @@ public class Menu extends JFrame {
 
                 holdButton = false;
 
-                robot.delay(5);
+                robot.delay(3);
 
             } else if (entry.getKey().contains("KeyBoard")) {
 
@@ -204,7 +208,28 @@ public class Menu extends JFrame {
                 Point point = (Point) entry.getValue();
                 robot.mouseMove((int) point.getX(), (int) point.getY());
 
-                robot.delay(5);
+                robot.delay(3);
+
+            } else if ((entry.getKey().contains("KeyCombo"))) {
+
+                try {
+
+                    int[] keyCombo = (int[]) entry.getValue();
+
+                    robot.keyPress(Main.keyboard.get(keyCombo[0]));
+                    robot.delay(500);
+                    robot.keyPress(Main.keyboard.get(keyCombo[1]));
+
+                    robot.keyRelease(Main.keyboard.get(keyCombo[1]));
+                    robot.keyRelease(Main.keyboard.get(keyCombo[0]));
+
+                    holdButton = false;
+
+                    robot.delay(500);
+
+                } catch (Exception e) {
+                    System.out.println("Keyboard combo not recognized");
+                }
             }
         }
     }
@@ -250,7 +275,7 @@ public class Menu extends JFrame {
 
             Font font2 = new Font("Spinner", Font.BOLD, 50);
 
-            nameOfRec.setFont(font);
+            nameOfRec.setFont(font2);
 
             hour.setFont(font2);
             minute.setFont(font2);
@@ -424,7 +449,13 @@ public class Menu extends JFrame {
 
                             setExtendedState(JFrame.ICONIFIED);
 
+                            record.setEnabled(false);
+                            stopRecord.setEnabled(false);
+
                             executeMovements(forCheck);
+
+                            record.setEnabled(true);
+                            stopRecord.setEnabled(true);
 
                             listIT.remove();
 
