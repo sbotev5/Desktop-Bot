@@ -4,7 +4,8 @@ import org.jnativehook.keyboard.NativeKeyEvent;
 public class KeyListener extends NativeKeyAdapter {
 
     private int lastKey = -1;
-    private boolean comboAdded = false;
+    private boolean comboDetected = false;
+    private int[] keyCombo = new int[2];
 
     public void nativeKeyPressed(NativeKeyEvent e) {
 
@@ -14,21 +15,11 @@ public class KeyListener extends NativeKeyAdapter {
 
         } else {
 
-            int[] keyCombo = new int[2];
             keyCombo[0] = lastKey;
             keyCombo[1] = e.getKeyCode();
 
-            if (Menu.shouldRecord) {
+            comboDetected = true;
 
-                System.out.println(keyCombo[0]);
-                System.out.println(keyCombo[1]);
-
-                Menu.userMovements.put("KeyCombo" + Menu.diffKeyPress, keyCombo);
-                Menu.diffKeyPress++;
-                comboAdded = true;
-                lastKey = -1;
-
-            }
         }
     }
 
@@ -36,9 +27,18 @@ public class KeyListener extends NativeKeyAdapter {
 
         if (Menu.shouldRecord) {
 
-            if (comboAdded) {
+            if (comboDetected) {
 
-                comboAdded = false;
+                if (Menu.shouldRecord) {
+
+                    Menu.userMovements.put("KeyCombo" + Menu.diffKeyPress, keyCombo);
+                    Menu.diffKeyPress++;
+
+                    lastKey = -1;
+
+                }
+
+                comboDetected = false;
 
             } else {
 
