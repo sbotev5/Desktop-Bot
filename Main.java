@@ -56,6 +56,7 @@ public class Main {
         }
 
         MouseListener ml = new MouseListener();
+
         GlobalScreen.addNativeMouseListener(ml);
         GlobalScreen.addNativeMouseMotionListener(ml);
 

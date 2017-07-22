@@ -157,21 +157,6 @@ public class Menu extends JFrame {
 
                 robot.delay(3);
 
-            } else if (entry.getKey().contains("KeyBoard")) {
-
-                try {
-
-                    robot.keyPress(Main.keyboard.get(entry.getValue()));
-                    robot.keyRelease(Main.keyboard.get(entry.getValue()));
-
-                    holdButton = false;
-
-                    robot.delay(500);
-
-                } catch (Exception exc) {
-                    System.out.println("Keyboard button not recognised!");
-                }
-
             } else if (entry.getKey().contains("MouseButton")) {
 
                 try {
@@ -196,8 +181,9 @@ public class Menu extends JFrame {
                     }
 
                 } catch (Exception exc) {
-                    System.out.println("Mouse button not recognised!");
+                    System.err.println("Mouse button not recognised!");
                 }
+
             } else if (entry.getKey().contains("MouseDrag")) {
 
                 if (!holdButton) {
@@ -209,6 +195,22 @@ public class Menu extends JFrame {
                 robot.mouseMove((int) point.getX(), (int) point.getY());
 
                 robot.delay(3);
+
+            } else if (entry.getKey().contains("KeyBoard")) {
+
+                try {
+
+                    robot.keyPress(Main.keyboard.get(entry.getValue()));
+                    robot.keyRelease(Main.keyboard.get(entry.getValue()));
+
+                    holdButton = false;
+
+                    robot.delay(500);
+
+                } catch (Exception exc) {
+                    System.err.println("Keyboard button not recognised!");
+                    System.out.println(entry.getValue());
+                }
 
             } else if ((entry.getKey().contains("KeyCombo"))) {
 
@@ -228,7 +230,7 @@ public class Menu extends JFrame {
                     robot.delay(500);
 
                 } catch (Exception e) {
-                    System.out.println("Keyboard combo not recognized");
+                    System.err.println("Keyboard combo not recognized!");
                 }
             }
         }

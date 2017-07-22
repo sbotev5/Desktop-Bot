@@ -1,7 +1,8 @@
+import org.jnativehook.keyboard.NativeKeyAdapter;
 import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
 
-public class KeyListener implements NativeKeyListener {
+public class KeyListener extends NativeKeyAdapter {
+
     private int lastKey = -1;
     private boolean comboAdded = false;
 
@@ -41,17 +42,12 @@ public class KeyListener implements NativeKeyListener {
 
             } else {
 
-                Menu.userMovements.put("KeyBoard" + Menu.diffKeyPress, lastKey);
+                Menu.userMovements.put("KeyBoard" + Menu.diffKeyPress, e.getKeyCode());
                 Menu.diffKeyPress++;
                 lastKey = -1;
 
             }
         }
     }
-
-    public void nativeKeyTyped(NativeKeyEvent e) {
-
-    }
-
 
 }

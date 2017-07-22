@@ -1,19 +1,10 @@
 import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseInputListener;
+import org.jnativehook.mouse.NativeMouseInputAdapter;
 
 import java.awt.*;
 
-public class MouseListener implements NativeMouseInputListener {
+public class MouseListener extends NativeMouseInputAdapter {
 
-
-    public void nativeMouseClicked(NativeMouseEvent e) {
-
-    }
-
-    public void nativeMousePressed(NativeMouseEvent e) {
-
-
-    }
 
     public void nativeMouseReleased(NativeMouseEvent e) {
 
@@ -37,6 +28,7 @@ public class MouseListener implements NativeMouseInputListener {
     }
 
     public void nativeMouseDragged(NativeMouseEvent e) {
+
         if (Menu.shouldRecord) {
 
             Menu.userMovements.put("MouseDrag" + Menu.diffMouseMove, new Point(e.getX(), e.getY()));
