@@ -17,6 +17,7 @@ public class Main {
     public static void main(String[] args) {
 
         populateKeyBoard();
+        setUpHook();
 
         try {
 
@@ -40,6 +41,10 @@ public class Main {
 
         });
 
+    }
+
+    private static void setUpHook() {
+
         LogManager.getLogManager().reset();
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.OFF);
@@ -61,10 +66,10 @@ public class Main {
         GlobalScreen.addNativeMouseMotionListener(ml);
 
         GlobalScreen.addNativeKeyListener(new KeyListener());
-
+        GlobalScreen.addNativeMouseWheelListener(new MouseWheelListener());
     }
 
-    public static void populateKeyBoard() {
+    private static void populateKeyBoard() {
 
         keyboard = new HashMap<Integer, Integer>();
 

@@ -25,6 +25,7 @@ public class Menu extends JFrame {
     public static int diffKeyPress = 0;
     public static int diffMouseMove = 0;
 
+
     private Robot robot;
 
     public Menu(Robot robot) {
@@ -108,7 +109,7 @@ public class Menu extends JFrame {
 
     }
 
-    public int[] getRecordingStats() {
+    private int[] getRecordingStats() {
 
         int[] stats = new int[3];
         int howManyMovements = 0;
@@ -125,13 +126,18 @@ public class Menu extends JFrame {
 
                 howManyKeyPresses++;
 
+                System.out.println(entry.getValue());
+
             } else if (entry.getKey().contains("KeyCombo")) {
 
-                howManyKeyPresses += 2;
+                ArrayList<Integer> arr  = (ArrayList<Integer>) entry.getValue();
+
+                howManyKeyPresses += arr.size();
 
             } else if (entry.getKey().contains("MouseButton")) {
 
                 howManyMouseClicks++;
+
             }
         }
 
@@ -142,7 +148,7 @@ public class Menu extends JFrame {
         return stats;
     }
 
-    public void executeMovements(LinkedHashMap<String, Object> var) {
+    private void executeMovements(LinkedHashMap<String, Object> var) {
 
         boolean holdButton = false;
 
@@ -156,6 +162,14 @@ public class Menu extends JFrame {
                 holdButton = false;
 
                 robot.delay(3);
+
+            } else if (entry.getKey().contains("WheelMove")){
+
+                robot.mouseWheel((int)entry.getValue());
+
+                holdButton = false;
+
+                robot.delay(500);
 
             } else if (entry.getKey().contains("MouseButton")) {
 
@@ -216,14 +230,21 @@ public class Menu extends JFrame {
 
                 try {
 
-                    int[] keyCombo = (int[]) entry.getValue();
+                    ArrayList<Integer> keyCombo = (ArrayList<Integer>) entry.getValue();
 
-                    robot.keyPress(Main.keyboard.get(keyCombo[0]));
+                    for (int i = keyCombo.size() - 1; i > 0; i--) {
+
+                        robot.keyPress(keyCombo.get(i));
+
+                    }
+
                     robot.delay(500);
-                    robot.keyPress(Main.keyboard.get(keyCombo[1]));
 
-                    robot.keyRelease(Main.keyboard.get(keyCombo[1]));
-                    robot.keyRelease(Main.keyboard.get(keyCombo[0]));
+                    for (int i : keyCombo) {
+
+                        robot.keyRelease(keyCombo.get(i));
+
+                    }
 
                     holdButton = false;
 
@@ -231,6 +252,8 @@ public class Menu extends JFrame {
 
                 } catch (Exception e) {
                     System.err.println("Keyboard combo not recognized!");
+
+
                 }
             }
         }
@@ -247,11 +270,11 @@ public class Menu extends JFrame {
         private JLabel enterName;
 
 
-        public RecordingStatsFrame() {
+        private RecordingStatsFrame() {
             super("RECORDING DETAILS");
         }
 
-        public void init() {
+        private void init() {
 
             record.setEnabled(false);
             stopRecord.setEnabled(false);

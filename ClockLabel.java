@@ -13,7 +13,7 @@ class ClockLabel extends JLabel implements ActionListener {
         setFont(new Font("ClockFont", Font.BOLD, 30));
     }
 
-    public void actionPerformed(ActionEvent ae) {
+    public void actionPerformed(ActionEvent e) {
 
         LocalTime time = LocalTime.now();
 
