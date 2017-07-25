@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class Main {
 
     private static Robot robot;
-    public static HashMap<Integer, Integer> keyboard;
+    static HashMap<Integer, Integer> keyboard;
 
     public static void main(String[] args) {
 
@@ -27,17 +27,13 @@ public class Main {
             e.printStackTrace();
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(() -> {
 
-            public void run() {
-
-                Menu menu = new Menu(robot);
-                menu.initialize();
-                menu.setVisible(true);
-                menu.setSize(700, 700);
-                menu.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-            }
+            Menu menu = new Menu(robot);
+            menu.initialize();
+            menu.setVisible(true);
+            menu.setSize(700, 700);
+            menu.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         });
 
@@ -71,7 +67,7 @@ public class Main {
 
     private static void populateKeyBoard() {
 
-        keyboard = new HashMap<Integer, Integer>();
+        keyboard = new HashMap<>();
 
         keyboard.put(1, KeyEvent.VK_ESCAPE);
         keyboard.put(2400, KeyEvent.KEY_FIRST);

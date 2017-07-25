@@ -1,7 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,14 +15,13 @@ public class Menu extends JFrame {
     private JPanel recordings;
     private JPanel mainPanel;
 
-    public static boolean shouldRecord = false;
-    public static LinkedHashMap<String, Object> userMovements;
-    public static ArrayList<LinkedHashMap<String, Object>> saveUserMovements;
-    public static HashMap<UUID, JPanel> updateGUI;
-    public static int diffMousePress = 0;
-    public static int diffKeyPress = 0;
-    public static int diffMouseMove = 0;
-
+    static boolean shouldRecord = false;
+    static LinkedHashMap<String, Object> userMovements;
+    private static ArrayList<LinkedHashMap<String, Object>> saveUserMovements;
+    private static HashMap<UUID, JPanel> updateGUI;
+    static int diffMousePress = 0;
+    static int diffKeyPress = 0;
+    static int diffMouseMove = 0;
 
     private Robot robot;
 
@@ -32,13 +29,14 @@ public class Menu extends JFrame {
 
         super("AUTOMATION TOOL");
         this.robot = robot;
+
     }
 
     public void initialize() {
 
         new Thread(new MyThread()).start();
-        saveUserMovements = new ArrayList<LinkedHashMap<String, Object>>();
-        updateGUI = new HashMap<UUID, JPanel>();
+        saveUserMovements = new ArrayList<>();
+        updateGUI = new HashMap<>();
 
         mainPanel = new JPanel();
         setContentPane(mainPanel);
@@ -67,40 +65,34 @@ public class Menu extends JFrame {
 
         clockPanel.add(clock);
 
-        record.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                userMovements = new LinkedHashMap<String, Object>();
-                shouldRecord = true;
-                setExtendedState(JFrame.ICONIFIED);
-                record.setEnabled(false);
-            }
+        record.addActionListener(e -> {
+            userMovements = new LinkedHashMap<>();
+            shouldRecord = true;
+            setExtendedState(JFrame.ICONIFIED);
+            record.setEnabled(false);
         });
 
-        stopRecord.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        stopRecord.addActionListener(e -> {
 
-                if (userMovements != null) {
+            if (userMovements != null) {
 
-                    String lastEntry = null;
+                String lastEntry = null;
 
-                    for (String key : userMovements.keySet()) {
+                for (String key : userMovements.keySet()) {
 
-                        lastEntry = key;
-                    }
+                    lastEntry = key;
+                }
 
-                    userMovements.remove(lastEntry);
+                userMovements.remove(lastEntry);
 
-                    shouldRecord = false;
-                    record.setEnabled(true);
+                shouldRecord = false;
+                record.setEnabled(true);
 
-                    RecordingStatsFrame statsFrame = new RecordingStatsFrame();
-                    statsFrame.init();
+                RecordingStatsFrame statsFrame = new RecordingStatsFrame();
+                statsFrame.init();
 
-                } else JOptionPane.showMessageDialog(null, "YOU HAVEN'T STARTED A RECORDING !");
+            } else JOptionPane.showMessageDialog(this, "YOU HAVEN'T STARTED A RECORDING !");
 
-            }
         });
 
         mainPanel.add(buttonPanel);
@@ -126,13 +118,10 @@ public class Menu extends JFrame {
 
                 howManyKeyPresses++;
 
-                System.out.println(entry.getValue());
 
             } else if (entry.getKey().contains("KeyCombo")) {
 
-                ArrayList<Integer> arr  = (ArrayList<Integer>) entry.getValue();
-
-                howManyKeyPresses += arr.size();
+                howManyKeyPresses += 2;
 
             } else if (entry.getKey().contains("MouseButton")) {
 
@@ -163,9 +152,9 @@ public class Menu extends JFrame {
 
                 robot.delay(3);
 
-            } else if (entry.getKey().contains("WheelMove")){
+            } else if (entry.getKey().contains("WheelMove")) {
 
-                robot.mouseWheel((int)entry.getValue());
+                robot.mouseWheel((int) entry.getValue());
 
                 holdButton = false;
 
@@ -223,28 +212,19 @@ public class Menu extends JFrame {
 
                 } catch (Exception exc) {
                     System.err.println("Keyboard button not recognised!");
-                    System.out.println(entry.getValue());
                 }
 
             } else if ((entry.getKey().contains("KeyCombo"))) {
 
                 try {
 
-                    ArrayList<Integer> keyCombo = (ArrayList<Integer>) entry.getValue();
+                    int[] keyCombo = (int[]) entry.getValue();
 
-                    for (int i = keyCombo.size() - 1; i > 0; i--) {
+                    robot.keyPress(keyCombo[0]);
+                    robot.keyPress(keyCombo[1]);
 
-                        robot.keyPress(keyCombo.get(i));
-
-                    }
-
-                    robot.delay(500);
-
-                    for (int i : keyCombo) {
-
-                        robot.keyRelease(keyCombo.get(i));
-
-                    }
+                    robot.keyRelease(keyCombo[1]);
+                    robot.keyPress(keyCombo[0]);
 
                     holdButton = false;
 
@@ -252,8 +232,6 @@ public class Menu extends JFrame {
 
                 } catch (Exception e) {
                     System.err.println("Keyboard combo not recognized!");
-
-
                 }
             }
         }
@@ -315,113 +293,102 @@ public class Menu extends JFrame {
             enterMinute.setFont(font);
 
             hour.setValue(0);
-            hour.addChangeListener(new ChangeListener() {
-
-                public void stateChanged(ChangeEvent e) {
-                    if ((int) hour.getValue() < 0 || (int) hour.getValue() > 23) {
-                        JOptionPane.showMessageDialog(null, "INVALID HOUR");
-                        hour.setValue(0);
-                    }
+            hour.addChangeListener(e -> {
+                if ((int) hour.getValue() < 0 || (int) hour.getValue() > 23) {
+                    JOptionPane.showMessageDialog(this, "INVALID HOUR");
+                    hour.setValue(0);
                 }
             });
 
             minute.setValue(0);
 
-            minute.addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e) {
+            minute.addChangeListener(e -> {
 
-                    if ((int) minute.getValue() < 0 || (int) minute.getValue() > 59) {
-                        JOptionPane.showMessageDialog(null, "INVALID MINUTE");
-                        minute.setValue(0);
-                    }
+                if ((int) minute.getValue() < 0 || (int) minute.getValue() > 59) {
+                    JOptionPane.showMessageDialog(this, "INVALID MINUTE");
+                    minute.setValue(0);
                 }
             });
 
-            setTime.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+            setTime.addActionListener(e -> {
 
-                    if (nameOfRec.getText().equals("")) {
+                if (nameOfRec.getText().equals("")) {
 
-                        JOptionPane.showMessageDialog(null, "PLEASE ENTER A NAME !");
+                    JOptionPane.showMessageDialog(this, "PLEASE ENTER A NAME !");
 
-                    } else {
+                } else {
 
-                        userMovements.put("RecordingName", nameOfRec.getText());
-                        userMovements.put("Hour", hour.getValue());
-                        userMovements.put("Minute", minute.getValue());
-                        UUID id = UUID.randomUUID();
-                        userMovements.put("ID", id);
+                    userMovements.put("RecordingName", nameOfRec.getText());
+                    userMovements.put("Hour", hour.getValue());
+                    userMovements.put("Minute", minute.getValue());
+                    UUID id = UUID.randomUUID();
+                    userMovements.put("ID", id);
 
-                        dispose();
+                    dispose();
 
-                        JPanel singleRecording = new JPanel();
-                        singleRecording.setLayout(new GridLayout(9, 1));
-                        singleRecording.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+                    JPanel singleRecording = new JPanel();
+                    singleRecording.setLayout(new GridLayout(9, 1));
+                    singleRecording.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 
-                        JLabel name = new JLabel("Recording Name : " + (String) userMovements.get("RecordingName"), SwingConstants.CENTER);
-                        JLabel timeForExecution = new JLabel("Time for execution : " + Integer.toString((int) userMovements.get("Hour")) + ":" + Integer.toString((int) userMovements.get("Minute")), SwingConstants.CENTER);
+                    JLabel name = new JLabel("Recording Name : " + userMovements.get("RecordingName"), SwingConstants.CENTER);
+                    JLabel timeForExecution = new JLabel("Time for execution : " + Integer.toString((int) userMovements.get("Hour")) + ":" + Integer.toString((int) userMovements.get("Minute")), SwingConstants.CENTER);
 
-                        Font font = new Font("Panel", Font.BOLD, 15);
+                    Font font1 = new Font("Panel", Font.BOLD, 15);
 
-                        name.setFont(font);
+                    name.setFont(font1);
 
-                        timeForExecution.setFont(font);
+                    timeForExecution.setFont(font1);
 
-                        JLabel numKeyPress = new JLabel("Number Of Key Presses : " + String.valueOf(stats[2]), SwingConstants.CENTER);
-                        numKeyPress.setFont(font);
+                    JLabel numKeyPress = new JLabel("Number Of Key Presses : " + String.valueOf(stats[2]), SwingConstants.CENTER);
+                    numKeyPress.setFont(font1);
 
-                        JLabel numPointerMoves = new JLabel("Number Of Mouse Pointer Movements : " + String.valueOf(stats[0]), SwingConstants.CENTER);
-                        numPointerMoves.setFont(font);
+                    JLabel numPointerMoves = new JLabel("Number Of Mouse Pointer Movements : " + String.valueOf(stats[0]), SwingConstants.CENTER);
+                    numPointerMoves.setFont(font1);
 
-                        JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + String.valueOf(stats[1]), SwingConstants.CENTER);
-                        numMouseClicks.setFont(font);
+                    JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + String.valueOf(stats[1]), SwingConstants.CENTER);
+                    numMouseClicks.setFont(font1);
 
-                        JLabel numTotalMoves = new JLabel("Number Of Total Movements : " + String.valueOf(userMovements.size() - 4), SwingConstants.CENTER);
-                        numTotalMoves.setFont(font);
+                    JLabel numTotalMoves = new JLabel("Number Of Total Movements : " + String.valueOf(userMovements.size() - 4), SwingConstants.CENTER);
+                    numTotalMoves.setFont(font1);
 
-                        JLabel idNumber = new JLabel("ID : " + id, SwingConstants.CENTER);
-                        idNumber.setFont(font);
+                    JLabel idNumber = new JLabel("ID : " + id, SwingConstants.CENTER);
+                    idNumber.setFont(font1);
 
-                        JButton remove = new JButton("Remove Recording");
+                    JButton remove = new JButton("Remove Recording");
 
-                        remove.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
+                    remove.addActionListener(e1 -> {
 
-                                for (Iterator<LinkedHashMap<String, Object>> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
+                        for (Iterator<LinkedHashMap<String, Object>> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
 
-                                    if (listIT.next().get("ID").equals(id)) {
-                                        listIT.remove();
-                                    }
-                                }
-
-                                recordings.remove(singleRecording);
-                                recordings.revalidate();
+                            if (listIT.next().get("ID").equals(id)) {
+                                listIT.remove();
                             }
-                        });
+                        }
 
-                        singleRecording.add(name);
-                        singleRecording.add(timeForExecution);
-                        singleRecording.add(numKeyPress);
-                        singleRecording.add(numPointerMoves);
-                        singleRecording.add(numMouseClicks);
-                        singleRecording.add(numTotalMoves);
-                        singleRecording.add(idNumber);
-                        singleRecording.add(remove);
+                        recordings.remove(singleRecording);
+                        recordings.revalidate();
+                    });
 
-                        updateGUI.put(id, singleRecording);
+                    singleRecording.add(name);
+                    singleRecording.add(timeForExecution);
+                    singleRecording.add(numKeyPress);
+                    singleRecording.add(numPointerMoves);
+                    singleRecording.add(numMouseClicks);
+                    singleRecording.add(numTotalMoves);
+                    singleRecording.add(idNumber);
+                    singleRecording.add(remove);
 
-                        recordings.add(singleRecording);
+                    updateGUI.put(id, singleRecording);
 
-                        saveUserMovements.add(userMovements);
+                    recordings.add(singleRecording);
 
-                        userMovements = null;
+                    saveUserMovements.add(userMovements);
 
-                        record.setEnabled(true);
-                        stopRecord.setEnabled(true);
+                    userMovements = null;
 
-                    }
+                    record.setEnabled(true);
+                    stopRecord.setEnabled(true);
+
                 }
             });
 

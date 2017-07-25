@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 class ClockLabel extends JLabel implements ActionListener {
 
-    public ClockLabel() {
+    ClockLabel() {
         super("");
         Timer t = new Timer(1000, this);
         t.start();
