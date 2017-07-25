@@ -114,6 +114,10 @@ public class Menu extends JFrame {
 
                 howManyMovements++;
 
+            }else if(entry.getKey().contains("WheelMove")){
+
+                howManyMovements++;
+
             } else if (entry.getKey().contains("KeyBoard")) {
 
                 howManyKeyPresses++;
@@ -358,12 +362,7 @@ public class Menu extends JFrame {
 
                     remove.addActionListener(e1 -> {
 
-                        for (Iterator<LinkedHashMap<String, Object>> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
-
-                            if (listIT.next().get("ID").equals(id)) {
-                                listIT.remove();
-                            }
-                        }
+                        saveUserMovements.removeIf(stringObjectLinkedHashMap -> stringObjectLinkedHashMap.get("ID").equals(id));
 
                         recordings.remove(singleRecording);
                         recordings.revalidate();

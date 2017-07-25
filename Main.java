@@ -157,5 +157,4 @@ public class Main {
         keyboard.put(21, KeyEvent.VK_Y);
         keyboard.put(44, KeyEvent.VK_Z);
     }
-
 }
