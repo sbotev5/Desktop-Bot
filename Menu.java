@@ -101,14 +101,14 @@ public class Menu extends JFrame {
 
     }
 
-    private int[] getRecordingStats() {
+    private int[] getRecordingStats(LinkedHashMap<String, Object> var) {
 
         int[] stats = new int[3];
         int howManyMovements = 0;
         int howManyMouseClicks = 0;
         int howManyKeyPresses = 0;
 
-        for (Map.Entry<String, Object> entry : userMovements.entrySet()) {
+        for (Map.Entry<String, Object> entry : var.entrySet()) {
 
             if (entry.getKey().contains("MouseMove") || entry.getKey().contains("MouseDrag")) {
 
@@ -270,7 +270,7 @@ public class Menu extends JFrame {
             minute = new JSpinner();
             nameOfRec = new JTextField();
 
-            int[] stats = getRecordingStats();
+            int[] stats = getRecordingStats(userMovements);
 
             JFormattedTextField txt1 = ((JSpinner.NumberEditor) hour.getEditor()).getTextField();
             ((NumberFormatter) txt1.getFormatter()).setAllowsInvalid(false);

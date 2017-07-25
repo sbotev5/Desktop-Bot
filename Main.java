@@ -65,7 +65,7 @@ public class Main {
         GlobalScreen.addNativeMouseWheelListener(new MouseWheelListener());
     }
 
-    private static void populateKeyBoard() {
+    public static void populateKeyBoard() {
 
         keyboard = new HashMap<>();
 
