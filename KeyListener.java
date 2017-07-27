@@ -31,8 +31,7 @@ public class KeyListener extends NativeKeyAdapter {
 
                 if (Menu.shouldRecord) {
 
-                    Menu.userMovements.put("KeyCombo" + Menu.diffKeyPress, keyCombo);
-                    Menu.diffKeyPress++;
+                    Menu.currentRecording.add(new Movement("KeyCombo", keyCombo));
 
                     lastKey = -1;
 
@@ -42,8 +41,8 @@ public class KeyListener extends NativeKeyAdapter {
 
             } else {
 
-                Menu.userMovements.put("KeyBoard" + Menu.diffKeyPress, e.getKeyCode());
-                Menu.diffKeyPress++;
+                Menu.currentRecording.add(new Movement("KeyBoard", e.getKeyCode()));
+
                 lastKey = -1;
 
             }
