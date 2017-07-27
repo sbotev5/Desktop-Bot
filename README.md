@@ -5,7 +5,7 @@ This is a simple task I wanted to do in my spare time and for practice while try
 
 Upon launching, the program starts a GUI which is used by the user to record movements - mouse click, key press, mouse pointer movements etc. After recording, the set of movements is saved wtih a specific time at which it will be executed. The program executes it when it is time automatically (using local time to know when).
 
-Additionaly, the user has an option to save a specific set of movements on a file and load it later from a file chooser.
+Additionally, the user has an option to save a specific set of movements on a file and load it later from a file chooser.
 
 Jar file (for demo) and source code included.
 
