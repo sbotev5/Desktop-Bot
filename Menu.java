@@ -25,8 +25,8 @@ public class Menu extends JFrame {
     private JPanel mainPanel;
 
     static boolean shouldRecord = false;
-    // static boolean safeToCheck = true;
-    static volatile ArrayList<UserMovements> saveUserMovements;
+    static boolean safeToCheck = true;
+    static ArrayList<UserMovements> saveUserMovements;
     static ArrayList<Movement> currentRecording;
     static HashMap<UUID, JPanel> updateGUI;
 
@@ -262,36 +262,36 @@ public class Menu extends JFrame {
         public void run() {
 
             while (true) {
-                //if (safeToCheck) {
-                LocalTime time = LocalTime.now();
-                System.out.println(saveUserMovements.size());
-                if (!saveUserMovements.isEmpty()) {
+                if (safeToCheck) {
+                    LocalTime time = LocalTime.now();
+                    //System.out.println(saveUserMovements.size());
+                    if (!saveUserMovements.isEmpty()) {
 
-                    for (Iterator<UserMovements> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
+                        for (Iterator<UserMovements> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
 
-                        UserMovements forCheck = listIT.next();
+                            UserMovements forCheck = listIT.next();
 
-                        if (forCheck != null && forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
+                            if (forCheck != null && forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
 
-                            setExtendedState(JFrame.ICONIFIED);
+                                setExtendedState(JFrame.ICONIFIED);
 
-                            record.setEnabled(false);
-                            stopRecord.setEnabled(false);
+                                record.setEnabled(false);
+                                stopRecord.setEnabled(false);
 
-                            executeMovements(forCheck);
+                                executeMovements(forCheck);
 
-                            record.setEnabled(true);
-                            stopRecord.setEnabled(true);
+                                record.setEnabled(true);
+                                stopRecord.setEnabled(true);
 
-                            listIT.remove();
+                                listIT.remove();
 
-                            recordings.remove(updateGUI.get(forCheck.getId()));
-                            recordings.revalidate();
+                                recordings.remove(updateGUI.get(forCheck.getId()));
+                                recordings.revalidate();
+                            }
                         }
                     }
                 }
             }
-            // }
         }
     }
 

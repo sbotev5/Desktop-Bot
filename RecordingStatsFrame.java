@@ -131,9 +131,9 @@ public class RecordingStatsFrame extends JFrame {
 
                 remove.addActionListener(e1 -> {
 
-                    // Menu.safeToCheck = false;
+                    Menu.safeToCheck = false;
                     Menu.saveUserMovements.removeIf(forCheck -> forCheck.getId().equals(id));
-                    // Menu.safeToCheck = true;
+                    Menu.safeToCheck = true;
 
                     menu.getRecordings().remove(singleRecording);
                     menu.getRecordings().revalidate();
