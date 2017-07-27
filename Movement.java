@@ -1,4 +1,6 @@
-public class Movement {
+import java.io.Serializable;
+
+public class Movement implements Serializable{
     private String type;
     private Object movement;
 

@@ -1,14 +1,24 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.InputEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.UUID;
 
 public class Menu extends JFrame {
 
     private JButton record;
     private JButton stopRecord;
+    private JButton loadRecording;
     private JPanel buttonPanel;
     private JPanel clockPanel;
     private JPanel recordings;
@@ -44,10 +54,13 @@ public class Menu extends JFrame {
         record.setFont(buttonFont);
         stopRecord = new JButton("STOP RECORDING");
         stopRecord.setFont(buttonFont);
+        loadRecording = new JButton("LOAD RECORDING");
+        loadRecording.setFont(buttonFont);
 
         buttonPanel = new JPanel();
         buttonPanel.add(record);
         buttonPanel.add(stopRecord);
+        buttonPanel.add(loadRecording);
 
         recordings = new JPanel();
         recordings.setLayout(new GridLayout(1, 5));
@@ -68,6 +81,7 @@ public class Menu extends JFrame {
 
             setExtendedState(JFrame.ICONIFIED);
             record.setEnabled(false);
+            loadRecording.setEnabled(false);
         });
 
         stopRecord.addActionListener(e -> {
@@ -78,12 +92,46 @@ public class Menu extends JFrame {
 
                 shouldRecord = false;
                 record.setEnabled(true);
+                loadRecording.setEnabled(true);
 
-                RecordingStatsFrame statsFrame = new RecordingStatsFrame(this);
-                statsFrame.initialize();
+                new RecordingStatsFrame(this).initialize();
 
             } else JOptionPane.showMessageDialog(this, "YOU HAVEN'T STARTED A RECORDING!");
 
+        });
+
+        loadRecording.addActionListener(e -> {
+
+            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+            jfc.setDialogTitle("Choose a recording file to load");
+
+            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            jfc.setMultiSelectionEnabled(false);
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Recording files", "ATrecording");
+            jfc.setAcceptAllFileFilterUsed(false);
+            jfc.addChoosableFileFilter(filter);
+
+            int returnValue = jfc.showOpenDialog(null);
+
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+                File selectedFile = jfc.getSelectedFile();
+
+                try {
+
+                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
+                    currentRecording = (ArrayList<Movement>) in.readObject();
+                    in.close();
+                    new RecordingStatsFrame(this).initialize();
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
         });
 
         mainPanel.add(buttonPanel);
@@ -217,7 +265,7 @@ public class Menu extends JFrame {
 
                         UserMovements forCheck = listIT.next();
 
-                        if (forCheck.getHour() == time.getHour() && forCheck.getMinute()== time.getMinute()) {
+                        if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
 
                             setExtendedState(JFrame.ICONIFIED);
 
@@ -246,6 +294,10 @@ public class Menu extends JFrame {
 
     public JButton getStopRecord() {
         return stopRecord;
+    }
+
+    public JButton getLoadRecording() {
+        return loadRecording;
     }
 
     public JPanel getRecordings() {

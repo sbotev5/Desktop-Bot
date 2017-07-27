@@ -3,6 +3,9 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -27,6 +30,7 @@ public class RecordingStatsFrame extends JFrame {
 
         menu.getRecord().setEnabled(false);
         menu.getStopRecord().setEnabled(false);
+        menu.getLoadRecording().setEnabled(false);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -133,6 +137,14 @@ public class RecordingStatsFrame extends JFrame {
                     menu.getRecordings().revalidate();
                 });
 
+                JButton save = new JButton("Save Recording");
+
+                save.addActionListener(e1 -> {
+
+                    saveRecording(singleUser.getId(), singleUser.getMovements());
+
+                });
+
                 singleRecording.add(name);
                 singleRecording.add(timeForExecution);
                 singleRecording.add(numKeyPress);
@@ -140,6 +152,7 @@ public class RecordingStatsFrame extends JFrame {
                 singleRecording.add(numMouseClicks);
                 singleRecording.add(numTotalMoves);
                 singleRecording.add(idNumber);
+                singleRecording.add(save);
                 singleRecording.add(remove);
 
                 Menu.updateGUI.put(id, singleRecording);
@@ -152,6 +165,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 menu.getRecord().setEnabled(true);
                 menu.getStopRecord().setEnabled(true);
+                menu.getLoadRecording().setEnabled(true);
 
             }
         });
@@ -226,5 +240,21 @@ public class RecordingStatsFrame extends JFrame {
         stats[2] = howManyKeyPresses;
 
         return stats;
+    }
+
+    private void saveRecording(UUID id, ArrayList<Movement> recording) {
+
+        try {
+
+            FileOutputStream fileOut = new FileOutputStream("recording" + id + ".ATrecording");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+
+            out.writeObject(recording);
+            out.close();
+            fileOut.close();
+
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
     }
 }
