@@ -25,7 +25,8 @@ public class Menu extends JFrame {
     private JPanel mainPanel;
 
     static boolean shouldRecord = false;
-    static ArrayList<UserMovements> saveUserMovements;
+    // static boolean safeToCheck = true;
+    static volatile ArrayList<UserMovements> saveUserMovements;
     static ArrayList<Movement> currentRecording;
     static HashMap<UUID, JPanel> updateGUI;
 
@@ -102,42 +103,47 @@ public class Menu extends JFrame {
 
         loadRecording.addActionListener(e -> {
 
-            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-            jfc.setDialogTitle("Choose a recording file to load");
+            loadFile();
 
-            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            jfc.setMultiSelectionEnabled(false);
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Recording files", "ATrecording");
-            jfc.setAcceptAllFileFilterUsed(false);
-            jfc.addChoosableFileFilter(filter);
-
-            int returnValue = jfc.showOpenDialog(null);
-
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-                File selectedFile = jfc.getSelectedFile();
-
-                try {
-
-                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
-                    currentRecording = (ArrayList<Movement>) in.readObject();
-                    in.close();
-                    new RecordingStatsFrame(this).initialize();
-
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-
-            }
         });
 
         mainPanel.add(buttonPanel);
         mainPanel.add(clockPanel);
         mainPanel.add(recordings);
 
+    }
+
+    private void loadFile() {
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        jfc.setDialogTitle("Choose a recording file to load");
+
+        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        jfc.setMultiSelectionEnabled(false);
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Recording files", "ATrecording");
+        jfc.setAcceptAllFileFilterUsed(false);
+        jfc.addChoosableFileFilter(filter);
+
+        int returnValue = jfc.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+            File selectedFile = jfc.getSelectedFile();
+
+            try {
+
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
+                currentRecording = (ArrayList<Movement>) in.readObject();
+                in.close();
+                new RecordingStatsFrame(this).initialize();
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+        }
     }
 
     private void executeMovements(UserMovements var) {
@@ -256,16 +262,16 @@ public class Menu extends JFrame {
         public void run() {
 
             while (true) {
-
+                //if (safeToCheck) {
                 LocalTime time = LocalTime.now();
-
+                System.out.println(saveUserMovements.size());
                 if (!saveUserMovements.isEmpty()) {
 
                     for (Iterator<UserMovements> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
 
                         UserMovements forCheck = listIT.next();
 
-                        if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
+                        if (forCheck != null && forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
 
                             setExtendedState(JFrame.ICONIFIED);
 
@@ -285,6 +291,7 @@ public class Menu extends JFrame {
                     }
                 }
             }
+            // }
         }
     }
 

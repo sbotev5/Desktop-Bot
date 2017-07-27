@@ -131,7 +131,9 @@ public class RecordingStatsFrame extends JFrame {
 
                 remove.addActionListener(e1 -> {
 
+                    // Menu.safeToCheck = false;
                     Menu.saveUserMovements.removeIf(forCheck -> forCheck.getId().equals(id));
+                    // Menu.safeToCheck = true;
 
                     menu.getRecordings().remove(singleRecording);
                     menu.getRecordings().revalidate();
@@ -246,7 +248,7 @@ public class RecordingStatsFrame extends JFrame {
 
         try {
 
-            FileOutputStream fileOut = new FileOutputStream("recording" + id + ".ATrecording");
+            FileOutputStream fileOut = new FileOutputStream("RECORDING" + id + ".ATrecording");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(recording);
