@@ -22,7 +22,7 @@ public class RecordingStatsFrame extends JFrame {
 
 
     RecordingStatsFrame(Menu menu) {
-        super("RECORDING DETAILS");
+        super("ENTER RECORDING DETAILS");
         this.menu = menu;
     }
 
@@ -58,13 +58,13 @@ public class RecordingStatsFrame extends JFrame {
         hour.setFont(font2);
         minute.setFont(font2);
 
-        enterHour = new JLabel("ENTER HOUR FOR AUTOMATIC EXECUTION", SwingConstants.CENTER);
+        enterHour = new JLabel("HOUR FOR AUTOMATIC EXECUTION", SwingConstants.CENTER);
         enterHour.setFont(font);
 
-        enterName = new JLabel("ENTER NAME OF RECORDING", SwingConstants.CENTER);
+        enterName = new JLabel("NAME OF RECORDING", SwingConstants.CENTER);
         enterName.setFont(font);
 
-        enterMinute = new JLabel("ENTER MINUTE FOR AUTOMATIC EXECUTION", SwingConstants.CENTER);
+        enterMinute = new JLabel("MINUTE FOR AUTOMATIC EXECUTION", SwingConstants.CENTER);
         enterMinute.setFont(font);
 
         hour.setValue(0);
@@ -87,9 +87,23 @@ public class RecordingStatsFrame extends JFrame {
 
         setTime.addActionListener(e -> {
 
-            if (nameOfRec.getText().equals("")) {
+            boolean timeClash = false;
 
-                JOptionPane.showMessageDialog(this, "PLEASE ENTER A NAME!");
+            for (UserMovements um : Menu.saveUserMovements) {
+
+                if (um.getHour() == (int) hour.getValue() && um.getMinute() == (int) minute.getValue()) {
+                    timeClash = true;
+                }
+
+            }
+
+            if (timeClash) {
+
+                JOptionPane.showMessageDialog(this, "A recording with the same execution time already exists!");
+
+            } else if (nameOfRec.getText().equals("")) {
+
+                JOptionPane.showMessageDialog(this, "Please enter a name.");
 
             } else {
 
@@ -248,7 +262,7 @@ public class RecordingStatsFrame extends JFrame {
 
         try {
 
-            FileOutputStream fileOut = new FileOutputStream("RECORDING" + id + ".ATrecording");
+            FileOutputStream fileOut = new FileOutputStream("REC" + id + ".ATrecording");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(recording);

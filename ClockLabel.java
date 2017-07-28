@@ -21,6 +21,5 @@ class ClockLabel extends JLabel implements ActionListener {
             setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()) + " AM");
         } else
             setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()) + " PM");
-
     }
 }
