@@ -10,7 +10,7 @@ class ClockLabel extends JLabel implements ActionListener {
         super("");
         Timer t = new Timer(1000, this);
         t.start();
-        setFont(new Font("ClockFont", Font.BOLD, 30));
+        setFont(new Font("ClockFont", Font.BOLD, 50));
     }
 
     public void actionPerformed(ActionEvent e) {
