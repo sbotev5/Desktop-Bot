@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
@@ -26,6 +25,8 @@ public class Menu extends JFrame {
 
     static boolean shouldRecord = false;
     static boolean safeToCheck = true;
+    static long startTime;
+    static long stopTime;
     static ArrayList<UserMovements> saveUserMovements;
     static ArrayList<Movement> currentRecording;
     static HashMap<UUID, JPanel> updateGUI;
@@ -65,19 +66,16 @@ public class Menu extends JFrame {
 
         recordings = new JPanel();
         recordings.setLayout(new GridLayout(1, 5));
-        recordings.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK, 3)), "RECORDINGS",
-                TitledBorder.CENTER, TitledBorder.TOP));
 
         clockPanel = new JPanel();
         ClockLabel clock = new ClockLabel();
-        clock.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 
         clockPanel.add(clock);
 
         record.addActionListener(e -> {
 
             currentRecording = new ArrayList<>();
+            startTime = System.nanoTime();
             shouldRecord = true;
 
             setExtendedState(JFrame.ICONIFIED);
@@ -92,6 +90,7 @@ public class Menu extends JFrame {
                 currentRecording.remove(currentRecording.size() - 1);
 
                 shouldRecord = false;
+                stopTime = System.nanoTime() - startTime;
                 record.setEnabled(true);
                 loadRecording.setEnabled(true);
 
@@ -262,6 +261,7 @@ public class Menu extends JFrame {
         public void run() {
 
             while (true) {
+
                 if (safeToCheck) {
                     LocalTime time = LocalTime.now();
                     //System.out.println(saveUserMovements.size());

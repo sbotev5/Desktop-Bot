@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class RecordingStatsFrame extends JFrame {
 
@@ -88,18 +89,21 @@ public class RecordingStatsFrame extends JFrame {
         setTime.addActionListener(e -> {
 
             boolean timeClash = false;
+            String clashesWith = null;
+            long recordingDuration = TimeUnit.NANOSECONDS.toSeconds(Menu.stopTime);
 
             for (UserMovements um : Menu.saveUserMovements) {
 
                 if (um.getHour() == (int) hour.getValue() && um.getMinute() == (int) minute.getValue()) {
                     timeClash = true;
+                    clashesWith = um.getName();
                 }
 
             }
 
             if (timeClash) {
 
-                JOptionPane.showMessageDialog(this, "A recording with the same execution time already exists!");
+                JOptionPane.showMessageDialog(this, "A recording named \"" + clashesWith + "\" has the same execution time!");
 
             } else if (nameOfRec.getText().equals("")) {
 
@@ -109,33 +113,34 @@ public class RecordingStatsFrame extends JFrame {
 
                 UUID id = UUID.randomUUID();
 
-                UserMovements singleUser = new UserMovements(nameOfRec.getText(), id, (int) hour.getValue(), (int) minute.getValue(), Menu.currentRecording);
+                UserMovements singleUser = new UserMovements(nameOfRec.getText(), id, (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording);
 
                 dispose();
 
                 JPanel singleRecording = new JPanel();
-                singleRecording.setLayout(new GridLayout(9, 1));
-                singleRecording.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+                singleRecording.setLayout(new GridLayout(10, 1));
+                singleRecording.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 
                 JLabel name = new JLabel("Recording Name : " + singleUser.getName(), SwingConstants.CENTER);
-                JLabel timeForExecution = new JLabel("Time for execution : " + Integer.toString(singleUser.getHour()) + ":" + Integer.toString(singleUser.getMinute()), SwingConstants.CENTER);
+                JLabel timeForExecution = new JLabel("Time for execution : " + singleUser.getHour() + ":" + singleUser.getMinute(), SwingConstants.CENTER);
+                JLabel durationLabel = new JLabel("Duration : " + singleUser.getDuration() + " seconds", SwingConstants.CENTER);
 
                 Font font1 = new Font("Panel", Font.BOLD, 15);
 
                 name.setFont(font1);
-
                 timeForExecution.setFont(font1);
+                durationLabel.setFont(font1);
 
-                JLabel numKeyPress = new JLabel("Number Of Key Presses : " + String.valueOf(stats[2]), SwingConstants.CENTER);
+                JLabel numKeyPress = new JLabel("Number Of Key Presses : " + stats[2], SwingConstants.CENTER);
                 numKeyPress.setFont(font1);
 
-                JLabel numPointerMoves = new JLabel("Number Of Mouse Pointer Movements : " + String.valueOf(stats[0]), SwingConstants.CENTER);
+                JLabel numPointerMoves = new JLabel("Number Of Mouse Pointer Movements : " + stats[0], SwingConstants.CENTER);
                 numPointerMoves.setFont(font1);
 
-                JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + String.valueOf(stats[1]), SwingConstants.CENTER);
+                JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + stats[1], SwingConstants.CENTER);
                 numMouseClicks.setFont(font1);
 
-                JLabel numTotalMoves = new JLabel("Number Of Total Movements : " + String.valueOf(singleUser.getMovements().size()), SwingConstants.CENTER);
+                JLabel numTotalMoves = new JLabel("Number Of Total Movements : " + singleUser.getMovements().size(), SwingConstants.CENTER);
                 numTotalMoves.setFont(font1);
 
                 JLabel idNumber = new JLabel("ID : " + id, SwingConstants.CENTER);
@@ -163,6 +168,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 singleRecording.add(name);
                 singleRecording.add(timeForExecution);
+                singleRecording.add(durationLabel);
                 singleRecording.add(numKeyPress);
                 singleRecording.add(numPointerMoves);
                 singleRecording.add(numMouseClicks);
