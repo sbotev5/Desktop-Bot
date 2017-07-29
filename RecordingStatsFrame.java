@@ -167,8 +167,8 @@ public class RecordingStatsFrame extends JFrame {
                 singleRecording.add(timeForExecution);
                 singleRecording.add(durationLabel);
                 singleRecording.add(numKeyPress);
-                singleRecording.add(numPointerMoves);
                 singleRecording.add(numMouseClicks);
+                singleRecording.add(numPointerMoves);
                 singleRecording.add(idNumber);
                 singleRecording.add(save);
                 singleRecording.add(remove);
