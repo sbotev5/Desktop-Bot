@@ -118,7 +118,7 @@ public class RecordingStatsFrame extends JFrame {
                 dispose();
 
                 JPanel singleRecording = new JPanel();
-                singleRecording.setLayout(new GridLayout(10, 1));
+                singleRecording.setLayout(new GridLayout(9, 1));
                 singleRecording.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 
                 JLabel name = new JLabel("Recording Name : " + singleUser.getName(), SwingConstants.CENTER);
@@ -139,9 +139,6 @@ public class RecordingStatsFrame extends JFrame {
 
                 JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + stats[1], SwingConstants.CENTER);
                 numMouseClicks.setFont(font1);
-
-                JLabel numTotalMoves = new JLabel("Number Of Total Movements : " + singleUser.getMovements().size(), SwingConstants.CENTER);
-                numTotalMoves.setFont(font1);
 
                 JLabel idNumber = new JLabel("ID : " + id, SwingConstants.CENTER);
                 idNumber.setFont(font1);
@@ -172,7 +169,6 @@ public class RecordingStatsFrame extends JFrame {
                 singleRecording.add(numKeyPress);
                 singleRecording.add(numPointerMoves);
                 singleRecording.add(numMouseClicks);
-                singleRecording.add(numTotalMoves);
                 singleRecording.add(idNumber);
                 singleRecording.add(save);
                 singleRecording.add(remove);
