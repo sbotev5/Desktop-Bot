@@ -18,27 +18,27 @@ class UserMovements {
         this.duration = duration;
     }
 
-    public int getHour() {
+    int getHour() {
         return hour;
     }
 
-    public int getMinute() {
+    int getMinute() {
         return minute;
     }
 
-    public UUID getId() {
+    UUID getId() {
         return id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public ArrayList<Movement> getMovements() {
+    ArrayList<Movement> getMovements() {
         return movements;
     }
 
-    public long getDuration() {
+    long getDuration() {
         return duration;
     }
 }

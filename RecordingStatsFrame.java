@@ -42,7 +42,7 @@ public class RecordingStatsFrame extends JFrame {
         minute = new JSpinner();
         nameOfRec = new JTextField();
 
-        int[] stats = getRecordingStats((ArrayList) Menu.currentRecording);
+        int[] stats = getRecordingStats(Menu.currentRecording);
 
         JFormattedTextField txt1 = ((JSpinner.NumberEditor) hour.getEditor()).getTextField();
         ((NumberFormatter) txt1.getFormatter()).setAllowsInvalid(false);
@@ -157,11 +157,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 JButton save = new JButton("Save Recording");
 
-                save.addActionListener(e1 -> {
-
-                    saveRecording(singleUser.getId(), singleUser.getMovements());
-
-                });
+                save.addActionListener(e1 -> saveRecording(singleUser.getId(), singleUser.getMovements()));
 
                 singleRecording.add(name);
                 singleRecording.add(timeForExecution);

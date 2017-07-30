@@ -22,7 +22,7 @@ public class Menu extends JFrame {
     private JPanel mainPanel;
 
     static boolean shouldRecord = false;
-    static long startTime;
+    private static long startTime;
     static long stopTime;
     static List<UserMovements> saveUserMovements;
     static ArrayList<Movement> currentRecording;
@@ -96,11 +96,7 @@ public class Menu extends JFrame {
 
         });
 
-        loadRecording.addActionListener(e -> {
-
-            loadFile();
-
-        });
+        loadRecording.addActionListener(e -> loadFile());
 
         mainPanel.add(buttonPanel);
         mainPanel.add(clockPanel);
@@ -133,9 +129,7 @@ public class Menu extends JFrame {
                 in.close();
                 new RecordingStatsFrame(this).initialize();
 
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            } catch (ClassNotFoundException e1) {
+            } catch (IOException | ClassNotFoundException e1) {
                 e1.printStackTrace();
             }
         }
@@ -263,12 +257,12 @@ public class Menu extends JFrame {
                 if (!saveUserMovements.isEmpty()) {
 
                     synchronized (saveUserMovements) {
-                        //System.out.println(saveUserMovements.size());
+
                         for (Iterator<UserMovements> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
 
                             UserMovements forCheck = listIT.next();
 
-                            if (forCheck != null && forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
+                            if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
 
                                 setExtendedState(JFrame.ICONIFIED);
 
@@ -292,19 +286,19 @@ public class Menu extends JFrame {
         }
     }
 
-    public JButton getRecord() {
+    JButton getRecord() {
         return record;
     }
 
-    public JButton getStopRecord() {
+    JButton getStopRecord() {
         return stopRecord;
     }
 
-    public JButton getLoadRecording() {
+    JButton getLoadRecording() {
         return loadRecording;
     }
 
-    public JPanel getRecordings() {
+    JPanel getRecordings() {
         return recordings;
     }
 }

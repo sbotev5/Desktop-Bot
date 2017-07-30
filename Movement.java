@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Movement implements Serializable {
+class Movement implements Serializable {
     private String type;
     private Object movement;
 
@@ -9,11 +9,11 @@ public class Movement implements Serializable {
         this.movement = movement;
     }
 
-    public String getType() {
+    String getType() {
         return type;
     }
 
-    public Object getMovement() {
+    Object getMovement() {
         return movement;
     }
 }
