@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
 public class Main {
 
     private static Robot robot;
-    static HashMap<Integer, Integer> keyboard;
+    static Map<Integer, Integer> keyboard;
 
     public static void main(String[] args) {
 

@@ -8,10 +8,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.UUID;
+import java.util.*;
+import java.util.List;
 
 public class Menu extends JFrame {
 
@@ -24,26 +22,24 @@ public class Menu extends JFrame {
     private JPanel mainPanel;
 
     static boolean shouldRecord = false;
-    static boolean safeToCheck = true;
     static long startTime;
     static long stopTime;
-    static ArrayList<UserMovements> saveUserMovements;
+    static List<UserMovements> saveUserMovements;
     static ArrayList<Movement> currentRecording;
-    static HashMap<UUID, JPanel> updateGUI;
+    static Map<UUID, JPanel> updateGUI;
 
     private Robot robot;
 
     Menu(Robot robot) {
-
         super("AUTOMATION TOOL");
         this.robot = robot;
-
     }
 
     void initialize() {
 
         new Thread(new MyThread()).start();
         saveUserMovements = new ArrayList<>();
+        saveUserMovements = Collections.synchronizedList(saveUserMovements);
         updateGUI = new HashMap<>();
 
         mainPanel = new JPanel();
@@ -113,6 +109,7 @@ public class Menu extends JFrame {
     }
 
     private void loadFile() {
+
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         jfc.setDialogTitle("Choose a recording file to load");
 
@@ -141,7 +138,6 @@ public class Menu extends JFrame {
             } catch (ClassNotFoundException e1) {
                 e1.printStackTrace();
             }
-
         }
     }
 
@@ -262,11 +258,12 @@ public class Menu extends JFrame {
 
             while (true) {
 
-                if (safeToCheck) {
-                    LocalTime time = LocalTime.now();
-                    //System.out.println(saveUserMovements.size());
-                    if (!saveUserMovements.isEmpty()) {
+                LocalTime time = LocalTime.now();
 
+                if (!saveUserMovements.isEmpty()) {
+
+                    synchronized (saveUserMovements) {
+                        //System.out.println(saveUserMovements.size());
                         for (Iterator<UserMovements> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
 
                             UserMovements forCheck = listIT.next();

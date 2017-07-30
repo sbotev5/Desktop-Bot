@@ -42,7 +42,7 @@ public class RecordingStatsFrame extends JFrame {
         minute = new JSpinner();
         nameOfRec = new JTextField();
 
-        int[] stats = getRecordingStats(Menu.currentRecording);
+        int[] stats = getRecordingStats((ArrayList) Menu.currentRecording);
 
         JFormattedTextField txt1 = ((JSpinner.NumberEditor) hour.getEditor()).getTextField();
         ((NumberFormatter) txt1.getFormatter()).setAllowsInvalid(false);
@@ -146,13 +146,13 @@ public class RecordingStatsFrame extends JFrame {
                 JButton remove = new JButton("Remove Recording");
 
                 remove.addActionListener(e1 -> {
+                    synchronized (Menu.saveUserMovements) {
 
-                    Menu.safeToCheck = false;
-                    Menu.saveUserMovements.removeIf(forCheck -> forCheck.getId().equals(id));
-                    Menu.safeToCheck = true;
+                        Menu.saveUserMovements.removeIf(forCheck -> forCheck.getId().equals(id));
 
-                    menu.getRecordings().remove(singleRecording);
-                    menu.getRecordings().revalidate();
+                        menu.getRecordings().remove(singleRecording);
+                        menu.getRecordings().revalidate();
+                    }
                 });
 
                 JButton save = new JButton("Save Recording");
