@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        populateKeyBoard();
+        setUpKeyBoard();
         setUpHook();
 
         try {
@@ -66,7 +66,7 @@ public class Main {
         GlobalScreen.addNativeMouseWheelListener(new MouseWheelListener());
     }
 
-    private static void populateKeyBoard() {
+    private static void setUpKeyBoard() {
 
         keyboard = new HashMap<>();
 
@@ -92,8 +92,14 @@ public class Main {
         keyboard.put(52, KeyEvent.VK_PERIOD);
         keyboard.put(53, KeyEvent.VK_SLASH);
         keyboard.put(56, KeyEvent.VK_ALT);
+        keyboard.put(29, KeyEvent.VK_CONTROL);
         keyboard.put(57, KeyEvent.VK_SPACE);
         keyboard.put(3639, KeyEvent.VK_PRINTSCREEN);
+        keyboard.put(3653, KeyEvent.VK_PAUSE);
+        keyboard.put(3666, KeyEvent.VK_INSERT);
+        keyboard.put(3667, KeyEvent.VK_DELETE);
+        keyboard.put(3655, KeyEvent.VK_HOME);
+        keyboard.put(3663, KeyEvent.VK_END);
 
         keyboard.put(2, KeyEvent.VK_1);
         keyboard.put(3, KeyEvent.VK_2);

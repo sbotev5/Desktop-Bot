@@ -20,8 +20,8 @@ class ClockLabel extends JLabel implements ActionListener {
 
         LocalTime time = LocalTime.now();
 
-        if (time.getHour() < 12) {
-            setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()));
+        if (time.getHour() < 10) {
+            setText("0" + String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()));
         } else
             setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()));
     }

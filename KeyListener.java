@@ -1,50 +1,72 @@
 import org.jnativehook.keyboard.NativeKeyAdapter;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
+import java.util.ArrayList;
+
 public class KeyListener extends NativeKeyAdapter {
 
-    private int lastKey = -1;
-    private boolean comboDetected = false;
-    private int[] keyCombo = new int[2];
+    private static boolean comboDetected = false;
+    private static int previousKey = -1;
+    private static ArrayList<Integer> keyCombo = new ArrayList<>();
+    private static ArrayList<Integer> var = new ArrayList<>();
 
     public void nativeKeyPressed(NativeKeyEvent e) {
+        System.out.println("Key pressed     " + e.getKeyCode());
+        if (Menu.shouldRecord) {
 
-        if (lastKey == -1 || e.getKeyCode() == lastKey) {
+            if (previousKey == -1) {
 
-            lastKey = e.getKeyCode();
+                previousKey = e.getKeyCode();
 
-        } else {
+            } else if (previousKey == e.getKeyCode()) {
 
-            keyCombo[0] = lastKey;
-            keyCombo[1] = e.getKeyCode();
+            } else {
 
-            comboDetected = true;
+                if (keyCombo.isEmpty()) {
 
+                    keyCombo.add(previousKey);
+                    keyCombo.add(e.getKeyCode());
+                    comboDetected = true;
+
+                } else {
+
+                    if (keyCombo.contains(e.getKeyCode())) {
+
+                    } else keyCombo.add(e.getKeyCode());
+
+                }
+            }
         }
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-
+        System.out.println("Key released     " + e.getKeyCode());
         if (Menu.shouldRecord) {
 
             if (comboDetected) {
 
-                if (Menu.shouldRecord) {
+                if (!keyCombo.isEmpty()) {
 
-                    Menu.currentRecording.add(new Movement("KeyCombo", keyCombo));
+                    var.add(keyCombo.get(keyCombo.size() - 1));
+                    keyCombo.remove(keyCombo.size() - 1);
 
-                    lastKey = -1;
+                } else {
 
+                    Menu.currentRecording.add(new Movement("KeyCombo", var));
+
+                    System.out.println("Size: " + var.size());
+                    System.out.println();
+                    for (int i = 0; i < var.size(); i++) {
+                        System.out.println(var.get(i));
+                    }
+
+                    comboDetected = false;
+                    var = new ArrayList<>();
                 }
 
-                comboDetected = false;
-
             } else {
-
                 Menu.currentRecording.add(new Movement("KeyBoard", e.getKeyCode()));
-
-                lastKey = -1;
-
+                previousKey = -1;
             }
         }
     }

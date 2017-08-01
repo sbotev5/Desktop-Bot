@@ -161,7 +161,7 @@ public class Menu extends JFrame {
 
                     holdButton = false;
 
-                    robot.delay(500);
+                    robot.delay(300);
 
                     break;
                 case "MouseButton":
@@ -227,13 +227,21 @@ public class Menu extends JFrame {
 
                     try {
 
-                        int[] keyCombo = (int[]) movement.getMovement();
+                        ArrayList<Integer> keyCombo = (ArrayList<Integer>) movement.getMovement();
 
-                        robot.keyPress(keyCombo[0]);
-                        robot.keyPress(keyCombo[1]);
+                        for (int i = keyCombo.size() - 1; i >= 0; i--) {
 
-                        robot.keyRelease(keyCombo[1]);
-                        robot.keyPress(keyCombo[0]);
+                            robot.keyPress(Main.keyboard.get(keyCombo.get(i)));
+
+                        }
+
+                        robot.delay(500);
+
+                        for (int i = 0; i < keyCombo.size(); i++) {
+
+                            robot.keyRelease(Main.keyboard.get(keyCombo.get(i)));
+
+                        }
 
                         holdButton = false;
 
@@ -241,6 +249,7 @@ public class Menu extends JFrame {
 
                     } catch (Exception e) {
                         System.err.println("Keyboard combo not recognized!");
+                        e.printStackTrace();
                     }
                     break;
             }
