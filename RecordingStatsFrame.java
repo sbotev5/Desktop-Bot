@@ -14,11 +14,11 @@ public class RecordingStatsFrame extends JFrame {
 
     private JSpinner hour;
     private JSpinner minute;
-    private JButton setTime;
-    private JTextField nameOfRec;
+    private JTextField name;
     private JLabel enterHour;
     private JLabel enterMinute;
     private JLabel enterName;
+    private JButton setTime;
     private Menu menu;
 
 
@@ -40,7 +40,7 @@ public class RecordingStatsFrame extends JFrame {
         setTime = new JButton("SET TIME");
         hour = new JSpinner();
         minute = new JSpinner();
-        nameOfRec = new JTextField();
+        name = new JTextField();
 
         int[] stats = getRecordingStats(Menu.currentRecording);
 
@@ -54,8 +54,7 @@ public class RecordingStatsFrame extends JFrame {
 
         Font font2 = new Font("Spinner", Font.BOLD, 50);
 
-        nameOfRec.setFont(font2);
-
+        name.setFont(font2);
         hour.setFont(font2);
         minute.setFont(font2);
 
@@ -77,7 +76,6 @@ public class RecordingStatsFrame extends JFrame {
         });
 
         minute.setValue(0);
-
         minute.addChangeListener(e -> {
 
             if ((int) minute.getValue() < 0 || (int) minute.getValue() > 59) {
@@ -90,6 +88,7 @@ public class RecordingStatsFrame extends JFrame {
 
             boolean timeClash = false;
             String clashesWith = null;
+
             long recordingDuration = TimeUnit.NANOSECONDS.toSeconds(Menu.stopTime);
 
             for (UserMovements um : Menu.saveUserMovements) {
@@ -105,7 +104,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 JOptionPane.showMessageDialog(this, "A recording named \"" + clashesWith + "\" has the same execution time!");
 
-            } else if (nameOfRec.getText().equals("")) {
+            } else if (name.getText().equals("")) {
 
                 JOptionPane.showMessageDialog(this, "Please enter a name.");
 
@@ -113,7 +112,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 UUID id = UUID.randomUUID();
 
-                UserMovements singleUser = new UserMovements(nameOfRec.getText(), id, (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording);
+                UserMovements singleUser = new UserMovements(name.getText(), id, (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording);
 
                 dispose();
 
@@ -187,7 +186,7 @@ public class RecordingStatsFrame extends JFrame {
         setTime.setFont(new Font("BUTTON", Font.BOLD, 40));
 
         panel.add(enterName);
-        panel.add(nameOfRec);
+        panel.add(name);
         panel.add(enterHour);
         panel.add(hour);
         panel.add(enterMinute);
@@ -205,7 +204,6 @@ public class RecordingStatsFrame extends JFrame {
 
                 menu.getRecord().setEnabled(true);
                 menu.getStopRecord().setEnabled(true);
-
             }
         });
 

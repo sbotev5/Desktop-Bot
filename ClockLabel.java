@@ -14,7 +14,6 @@ class ClockLabel extends JLabel implements ActionListener {
 
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
         setFont(new Font("ClockFont", Font.BOLD, 40));
-
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -22,8 +21,8 @@ class ClockLabel extends JLabel implements ActionListener {
         LocalTime time = LocalTime.now();
 
         if (time.getHour() < 12) {
-            setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()) + " AM");
+            setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()));
         } else
-            setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()) + " PM");
+            setText(String.valueOf(time.getHour()) + ":" + String.valueOf(time.getMinute()) + ":" + String.valueOf(time.getSecond()));
     }
 }

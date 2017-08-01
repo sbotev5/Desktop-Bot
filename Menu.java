@@ -21,7 +21,7 @@ public class Menu extends JFrame {
     private JPanel recordings;
     private JPanel mainPanel;
 
-    static boolean shouldRecord = false;
+    static boolean shouldRecord;
     private static long startTime;
     static long stopTime;
     static List<UserMovements> saveUserMovements;
@@ -41,6 +41,7 @@ public class Menu extends JFrame {
         saveUserMovements = new ArrayList<>();
         saveUserMovements = Collections.synchronizedList(saveUserMovements);
         updateGUI = new HashMap<>();
+        shouldRecord = false;
 
         mainPanel = new JPanel();
         setContentPane(mainPanel);
@@ -65,6 +66,7 @@ public class Menu extends JFrame {
 
         clockPanel = new JPanel();
         ClockLabel clock = new ClockLabel();
+
 
         clockPanel.add(clock);
 
