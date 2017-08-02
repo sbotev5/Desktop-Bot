@@ -110,15 +110,11 @@ public class RecordingStatsFrame extends JFrame {
 
             } else {
 
-                UUID id = UUID.randomUUID();
-
-                UserMovements singleUser = new UserMovements(name.getText(), id, (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording);
-
-                dispose();
-
                 JPanel singleRecording = new JPanel();
                 singleRecording.setLayout(new GridLayout(9, 1));
                 singleRecording.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+
+                UserMovements singleUser = new UserMovements(name.getText(), UUID.randomUUID(), (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording, singleRecording);
 
                 JLabel name = new JLabel("Recording Name : " + singleUser.getName(), SwingConstants.CENTER);
                 JLabel timeForExecution = new JLabel("Time for execution : " + singleUser.getHour() + ":" + singleUser.getMinute(), SwingConstants.CENTER);
@@ -139,7 +135,7 @@ public class RecordingStatsFrame extends JFrame {
                 JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + stats[1], SwingConstants.CENTER);
                 numMouseClicks.setFont(font1);
 
-                JLabel idNumber = new JLabel("ID : " + id, SwingConstants.CENTER);
+                JLabel idNumber = new JLabel("ID : " + singleUser.getId(), SwingConstants.CENTER);
                 idNumber.setFont(font1);
 
                 JButton remove = new JButton("Remove Recording");
@@ -147,7 +143,7 @@ public class RecordingStatsFrame extends JFrame {
                 remove.addActionListener(e1 -> {
                     synchronized (Menu.saveUserMovements) {
 
-                        Menu.saveUserMovements.removeIf(forCheck -> forCheck.getId().equals(id));
+                        Menu.saveUserMovements.remove(singleUser);
 
                         menu.getRecordings().remove(singleRecording);
                         menu.getRecordings().revalidate();
@@ -156,7 +152,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 JButton save = new JButton("Save Recording");
 
-                save.addActionListener(e1 -> saveRecording(singleUser.getId(), singleUser.getMovements()));
+                save.addActionListener(e1 -> saveRecording(singleUser.getName(), singleUser.getMovements()));
 
                 singleRecording.add(name);
                 singleRecording.add(timeForExecution);
@@ -168,13 +164,13 @@ public class RecordingStatsFrame extends JFrame {
                 singleRecording.add(save);
                 singleRecording.add(remove);
 
-                Menu.updateGUI.put(id, singleRecording);
-
                 menu.getRecordings().add(singleRecording);
 
                 Menu.saveUserMovements.add(singleUser);
 
                 Menu.currentRecording = null;
+
+                dispose();
 
                 menu.getRecord().setEnabled(true);
                 menu.getStopRecord().setEnabled(true);
@@ -255,11 +251,11 @@ public class RecordingStatsFrame extends JFrame {
         return stats;
     }
 
-    private void saveRecording(UUID id, ArrayList<Movement> recording) {
+    private void saveRecording(String name, ArrayList<Movement> recording) {
 
         try {
 
-            FileOutputStream fileOut = new FileOutputStream("REC" + id + ".ATrecording");
+            FileOutputStream fileOut = new FileOutputStream("REC" + name + ".ATrecording");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(recording);

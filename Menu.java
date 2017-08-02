@@ -26,7 +26,6 @@ public class Menu extends JFrame {
     static long stopTime;
     static List<UserMovements> saveUserMovements;
     static ArrayList<Movement> currentRecording;
-    static Map<UUID, JPanel> updateGUI;
 
     private Robot robot;
 
@@ -40,7 +39,6 @@ public class Menu extends JFrame {
         new Thread(new MyThread()).start();
         saveUserMovements = new ArrayList<>();
         saveUserMovements = Collections.synchronizedList(saveUserMovements);
-        updateGUI = new HashMap<>();
         shouldRecord = false;
 
         mainPanel = new JPanel();
@@ -296,7 +294,7 @@ public class Menu extends JFrame {
 
                                 listIT.remove();
 
-                                recordings.remove(updateGUI.get(forCheck.getId()));
+                                recordings.remove(forCheck.getPanelGUI());
                                 recordings.revalidate();
                             }
                         }
