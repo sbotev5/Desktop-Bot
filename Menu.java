@@ -177,6 +177,15 @@ public class Menu extends JFrame {
 
                             robot.delay(500);
 
+                        } else if ((int) movement.getMovement() == 3) {
+
+                            robot.mousePress(InputEvent.BUTTON2_DOWN_MASK);
+                            robot.mouseRelease(InputEvent.BUTTON2_DOWN_MASK);
+
+                            holdButton = false;
+
+                            robot.delay(500);
+
                         } else {
 
                             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);

@@ -7,11 +7,11 @@ public class KeyListener extends NativeKeyAdapter {
 
     private static boolean comboDetected = false;
     private static int previousKey = -1;
+    private static ArrayList<Integer> var;
     private static ArrayList<Integer> keyCombo = new ArrayList<>();
-    private static ArrayList<Integer> var = new ArrayList<>();
 
     public void nativeKeyPressed(NativeKeyEvent e) {
-        System.out.println("Key pressed     " + e.getKeyCode());
+
         if (Menu.shouldRecord) {
 
             if (previousKey == -1) {
@@ -26,7 +26,9 @@ public class KeyListener extends NativeKeyAdapter {
 
                     keyCombo.add(previousKey);
                     keyCombo.add(e.getKeyCode());
+
                     comboDetected = true;
+                    var = new ArrayList<>();
 
                 } else {
 
@@ -40,7 +42,7 @@ public class KeyListener extends NativeKeyAdapter {
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-        System.out.println("Key released     " + e.getKeyCode());
+
         if (Menu.shouldRecord) {
 
             if (comboDetected) {
@@ -54,19 +56,16 @@ public class KeyListener extends NativeKeyAdapter {
 
                     Menu.currentRecording.add(new Movement("KeyCombo", var));
 
-                    System.out.println("Size: " + var.size());
-                    System.out.println();
-                    for (int i = 0; i < var.size(); i++) {
-                        System.out.println(var.get(i));
-                    }
-
                     comboDetected = false;
                     var = new ArrayList<>();
+                    previousKey = -1;
                 }
 
             } else {
+
                 Menu.currentRecording.add(new Movement("KeyBoard", e.getKeyCode()));
                 previousKey = -1;
+
             }
         }
     }
