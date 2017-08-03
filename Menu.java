@@ -286,11 +286,13 @@ public class Menu extends JFrame {
 
                                 record.setEnabled(false);
                                 stopRecord.setEnabled(false);
+                                loadRecording.setEnabled(false);
 
                                 executeMovements(forCheck);
 
                                 record.setEnabled(true);
                                 stopRecord.setEnabled(true);
+                                loadRecording.setEnabled(true);
 
                                 listIT.remove();
 

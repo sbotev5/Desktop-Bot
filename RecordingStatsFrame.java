@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class RecordingStatsFrame extends JFrame {
@@ -115,10 +114,10 @@ public class RecordingStatsFrame extends JFrame {
             } else {
 
                 JPanel singleRecording = new JPanel();
-                singleRecording.setLayout(new GridLayout(9, 1));
+                singleRecording.setLayout(new GridLayout(8, 1));
                 singleRecording.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 
-                UserMovements singleUser = new UserMovements(name.getText(), UUID.randomUUID(), (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording, singleRecording);
+                UserMovements singleUser = new UserMovements(name.getText(), (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording, singleRecording);
 
                 JLabel name = new JLabel("Recording Name : " + singleUser.getName(), SwingConstants.CENTER);
                 JLabel timeForExecution = new JLabel("Time for execution : " + singleUser.getHour() + ":" + singleUser.getMinute(), SwingConstants.CENTER);
@@ -138,9 +137,6 @@ public class RecordingStatsFrame extends JFrame {
 
                 JLabel numMouseClicks = new JLabel("Number Of Mouse Clicks : " + stats[1], SwingConstants.CENTER);
                 numMouseClicks.setFont(font1);
-
-                JLabel idNumber = new JLabel("ID : " + singleUser.getId(), SwingConstants.CENTER);
-                idNumber.setFont(font1);
 
                 JButton remove = new JButton("Remove Recording");
 
@@ -165,7 +161,6 @@ public class RecordingStatsFrame extends JFrame {
                 singleRecording.add(numKeyPress);
                 singleRecording.add(numMouseClicks);
                 singleRecording.add(numPointerMoves);
-                singleRecording.add(idNumber);
                 singleRecording.add(save);
                 singleRecording.add(remove);
 
@@ -265,7 +260,7 @@ public class RecordingStatsFrame extends JFrame {
 
         try {
 
-            FileOutputStream fileOut = new FileOutputStream( name + ".ATrecording");
+            FileOutputStream fileOut = new FileOutputStream(name + ".ATrecording");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(recording);

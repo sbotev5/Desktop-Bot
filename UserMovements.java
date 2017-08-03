@@ -1,11 +1,9 @@
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.UUID;
 
 class UserMovements {
     private int hour;
     private int minute;
-    private UUID id;
     private String name;
     private ArrayList<Movement> movements;
     private long duration;
@@ -15,13 +13,12 @@ class UserMovements {
     // List<UserMovements> saveUserMovements (in Menu class) is better performance-wise than a Map
     // A Map would allow for recognizing different movement types (mouse move, click , key press etc) but does not allow duplicate keys
     // Additionally, having it as a class allows for better structure and better pairing of irrelevant data to the actual movements themselves
-    // (name, id, duration and time are not connected to the actual set of movements but to the recording itself)
+    // (name, duration and time are not connected to the actual set of movements but to the recording itself)
     // The JPanel that is used to show the recording on the GUI is stored here in order to remove the correct one
 
-    UserMovements(String name, UUID id, int hour, int minute, long duration, ArrayList<Movement> movements, JPanel panelGUI) {
+    UserMovements(String name, int hour, int minute, long duration, ArrayList<Movement> movements, JPanel panelGUI) {
         this.hour = hour;
         this.minute = minute;
-        this.id = id;
         this.name = name;
         this.movements = movements;
         this.duration = duration;
@@ -34,10 +31,6 @@ class UserMovements {
 
     int getMinute() {
         return minute;
-    }
-
-    UUID getId() {
-        return id;
     }
 
     String getName() {
