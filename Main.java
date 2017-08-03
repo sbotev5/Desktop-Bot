@@ -17,6 +17,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // code clarity
         setUpKeyBoard();
         setUpHook();
 
@@ -67,7 +68,7 @@ public class Main {
     }
 
     private static void setUpKeyBoard() {
-
+        //map that pairs JNativeHook key codes to KeyEvents for the Robot class
         keyboard = new HashMap<>();
 
         keyboard.put(1, KeyEvent.VK_ESCAPE);

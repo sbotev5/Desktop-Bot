@@ -22,9 +22,9 @@ public class Menu extends JFrame {
     private JPanel mainPanel;
 
     static boolean shouldRecord;
-    private static long startTime;
+    private static long startTime;  // start time and stop time used for duration of recording
     static long stopTime;
-    static List<UserMovements> saveUserMovements;
+    static List<UserMovements> saveUserMovements;  // keep user recordings here
     static ArrayList<Movement> currentRecording;
 
     private Robot robot;
@@ -34,11 +34,11 @@ public class Menu extends JFrame {
         this.robot = robot;
     }
 
-    void initialize() {
+    void initialize() {   // code style
 
         new Thread(new MyThread()).start();
         saveUserMovements = new ArrayList<>();
-        saveUserMovements = Collections.synchronizedList(saveUserMovements);
+        saveUserMovements = Collections.synchronizedList(saveUserMovements); // the ArrayList needs to be synced for thread safety
         shouldRecord = false;
 
         mainPanel = new JPanel();
@@ -68,7 +68,7 @@ public class Menu extends JFrame {
 
         clockPanel.add(clock);
 
-        record.addActionListener(e -> {
+        record.addActionListener(e -> {     //use of lambdas
 
             currentRecording = new ArrayList<>();
             startTime = System.nanoTime();
@@ -79,24 +79,24 @@ public class Menu extends JFrame {
             loadRecording.setEnabled(false);
         });
 
-        stopRecord.addActionListener(e -> {
+        stopRecord.addActionListener(e -> { // use of lambdas
 
-            if (currentRecording != null) {
+            if (currentRecording != null) {   // prevent user from not having a recording to stop
 
-                currentRecording.remove(currentRecording.size() - 1);
+                currentRecording.remove(currentRecording.size() - 1);  // the last click on "Stop Record" is not needed during playback
 
                 shouldRecord = false;
-                stopTime = System.nanoTime() - startTime;
+                stopTime = System.nanoTime() - startTime;  // accurately duration
                 record.setEnabled(true);
                 loadRecording.setEnabled(true);
 
                 new RecordingStatsFrame(this).initialize();
 
-            } else JOptionPane.showMessageDialog(this, "YOU HAVEN'T STARTED A RECORDING!");
+            } else JOptionPane.showMessageDialog(this, "YOU HAVEN'T STARTED A RECORDING!"); // informing the user
 
         });
 
-        loadRecording.addActionListener(e -> loadFile());
+        loadRecording.addActionListener(e -> loadFile());  // separated in a dedicated method for code clarity
 
         mainPanel.add(buttonPanel);
         mainPanel.add(clockPanel);
@@ -104,15 +104,15 @@ public class Menu extends JFrame {
 
     }
 
-    private void loadFile() {
+    private void loadFile() {   // used to load a serialized recording
 
-        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory()); //default to home dir
         jfc.setDialogTitle("Choose a recording file to load");
 
         jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         jfc.setMultiSelectionEnabled(false);
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Recording files", "ATrecording");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Recording files", "ATrecording"); // custom extension
         jfc.setAcceptAllFileFilterUsed(false);
         jfc.addChoosableFileFilter(filter);
 
@@ -123,7 +123,7 @@ public class Menu extends JFrame {
             File selectedFile = jfc.getSelectedFile();
 
             try {
-
+                // store the serialized object
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
                 currentRecording = (ArrayList<Movement>) in.readObject();
                 in.close();
@@ -135,9 +135,9 @@ public class Menu extends JFrame {
         }
     }
 
-    private void executeMovements(UserMovements var) {
+    private void executeMovements(UserMovements var) {   // when it is playback time this method goes through each movement and executes it
 
-        boolean holdButton = false;
+        boolean holdButton = false;  // for mouse dragging; left mouse button hold
 
         for (Movement movement : var.getMovements()) {
 
@@ -201,7 +201,7 @@ public class Menu extends JFrame {
                     break;
                 case "MouseDrag": {
 
-                    if (!holdButton) {
+                    if (!holdButton) {   // in order to achieve the mouse drag effect during playback
                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                         holdButton = true;
                     }
@@ -236,7 +236,7 @@ public class Menu extends JFrame {
 
                         ArrayList<Integer> keyCombo = (ArrayList<Integer>) movement.getMovement();
 
-                        for (int i = keyCombo.size() - 1; i >= 0; i--) {
+                        for (int i = 0; i < keyCombo.size(); i++) {
 
                             robot.keyPress(Main.keyboard.get(keyCombo.get(i)));
 
@@ -244,7 +244,7 @@ public class Menu extends JFrame {
 
                         robot.delay(500);
 
-                        for (int i = 0; i < keyCombo.size(); i++) {
+                        for (int i = keyCombo.size() - 1; i >= 0; i--) {
 
                             robot.keyRelease(Main.keyboard.get(keyCombo.get(i)));
 
@@ -266,11 +266,11 @@ public class Menu extends JFrame {
     private class MyThread implements Runnable {
 
         @Override
-        public void run() {
+        public void run() {   //constantly checks if a recording should be executed
 
             while (true) {
 
-                LocalTime time = LocalTime.now();
+                LocalTime time = LocalTime.now(); //getting current time
 
                 if (!saveUserMovements.isEmpty()) {
 
@@ -294,7 +294,7 @@ public class Menu extends JFrame {
 
                                 listIT.remove();
 
-                                recordings.remove(forCheck.getPanelGUI());
+                                recordings.remove(forCheck.getPanelGUI());  // updating the GUI when the playback is done
                                 recordings.revalidate();
                             }
                         }

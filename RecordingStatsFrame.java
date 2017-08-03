@@ -44,6 +44,8 @@ public class RecordingStatsFrame extends JFrame {
 
         int[] stats = getRecordingStats(Menu.currentRecording);
 
+        // Formatting JSpinners to not accepting anything apart from numbers
+
         JFormattedTextField txt1 = ((JSpinner.NumberEditor) hour.getEditor()).getTextField();
         ((NumberFormatter) txt1.getFormatter()).setAllowsInvalid(false);
 
@@ -89,9 +91,9 @@ public class RecordingStatsFrame extends JFrame {
             boolean timeClash = false;
             String clashesWith = null;
 
-            long recordingDuration = TimeUnit.NANOSECONDS.toSeconds(Menu.stopTime);
+            long recordingDuration = TimeUnit.NANOSECONDS.toSeconds(Menu.stopTime); //storing the duration
 
-            for (UserMovements um : Menu.saveUserMovements) {
+            for (UserMovements um : Menu.saveUserMovements) {  // checking for a time clash with already existing recordings
 
                 if (um.getHour() == (int) hour.getValue() && um.getMinute() == (int) minute.getValue()) {
                     timeClash = true;
@@ -102,11 +104,13 @@ public class RecordingStatsFrame extends JFrame {
 
             if (timeClash) {
 
+                //informing the user which recording is in conflict with the current, if any
+
                 JOptionPane.showMessageDialog(this, "A recording named \"" + clashesWith + "\" has the same execution time!");
 
             } else if (name.getText().equals("")) {
 
-                JOptionPane.showMessageDialog(this, "Please enter a name.");
+                JOptionPane.showMessageDialog(this, "Please enter a name."); // informing the user
 
             } else {
 
@@ -145,13 +149,14 @@ public class RecordingStatsFrame extends JFrame {
 
                         Menu.saveUserMovements.remove(singleUser);
 
-                        menu.getRecordings().remove(singleRecording);
+                        menu.getRecordings().remove(singleRecording); //updating GUI
                         menu.getRecordings().revalidate();
                     }
                 });
 
                 JButton save = new JButton("Save Recording");
 
+                //dedicated method for code clarity
                 save.addActionListener(e1 -> saveRecording(singleUser.getName(), singleUser.getMovements()));
 
                 singleRecording.add(name);
@@ -191,7 +196,7 @@ public class RecordingStatsFrame extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(WindowEvent e) {  //if user does not want to keep recording upon entering stats
                 super.windowClosing(e);
 
                 dispose();
@@ -208,6 +213,8 @@ public class RecordingStatsFrame extends JFrame {
     }
 
     private int[] getRecordingStats(ArrayList<Movement> var) {
+
+        // used to generate some stats about the recording just as an extra
 
         int[] stats = new int[3];
 
@@ -232,7 +239,7 @@ public class RecordingStatsFrame extends JFrame {
                     break;
                 case "KeyCombo":
 
-                    ArrayList<Integer> howManyKeys = (ArrayList<Integer>) movement.getMovement();
+                    ArrayList<Integer> howManyKeys = (ArrayList<Integer>) movement.getMovement();  // the combo might be 2, 3, n keys
                     howManyKeyPresses += howManyKeys.size();
 
                     break;
@@ -253,9 +260,11 @@ public class RecordingStatsFrame extends JFrame {
 
     private void saveRecording(String name, ArrayList<Movement> recording) {
 
+        //used in order to have the option to save a recording as a serialized object, using its name to differentiate and avoid overwriting
+
         try {
 
-            FileOutputStream fileOut = new FileOutputStream("REC" + name + ".ATrecording");
+            FileOutputStream fileOut = new FileOutputStream( name + ".ATrecording");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(recording);
