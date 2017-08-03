@@ -205,6 +205,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 menu.getRecord().setEnabled(true);
                 menu.getStopRecord().setEnabled(true);
+                menu.getLoadRecording().setEnabled(true);
             }
         });
 

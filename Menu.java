@@ -123,7 +123,7 @@ public class Menu extends JFrame {
             File selectedFile = jfc.getSelectedFile();
 
             try {
-                // store the serialized object
+                // deserialize and store
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
                 currentRecording = (ArrayList<Movement>) in.readObject();
                 in.close();
