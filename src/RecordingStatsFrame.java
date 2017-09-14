@@ -229,15 +229,9 @@ public class RecordingStatsFrame extends JFrame {
                     howManyMovements++;
 
                     break;
-                case "KeyBoard":
+                case "KeyPress":
 
                     howManyKeyPresses++;
-
-                    break;
-                case "KeyCombo":
-
-                    ArrayList<Integer> howManyKeys = (ArrayList<Integer>) movement.getMovement();  // the combo might be 2, 3, n keys
-                    howManyKeyPresses += howManyKeys.size();
 
                     break;
                 case "MouseButton":
