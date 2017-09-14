@@ -6,8 +6,10 @@ class Movement implements Serializable {
     private Object movement; //Robot class needs a Point for mouse movements; JNativeHook works with key codes (ints) for key presses
 
     Movement(String type, Object movement) {
+
         this.type = type;
         this.movement = movement;
+
     }
 
     String getType() {

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 class UserMovements {
+
     private int hour;
     private int minute;
     private String name;
@@ -17,12 +18,14 @@ class UserMovements {
     // The JPanel that is used to show the recording on the GUI is stored here in order to remove the correct one
 
     UserMovements(String name, int hour, int minute, long duration, ArrayList<Movement> movements, JPanel panelGUI) {
+
         this.hour = hour;
         this.minute = minute;
         this.name = name;
         this.movements = movements;
         this.duration = duration;
         this.panelGUI = panelGUI;
+
     }
 
     int getHour() {

@@ -30,8 +30,10 @@ public class Menu extends JFrame {
     private Robot robot;
 
     Menu(Robot robot) {
+
         super("AUTOMATION TOOL");
         this.robot = robot;
+
     }
 
     void initialize() {   // code style
@@ -142,6 +144,7 @@ public class Menu extends JFrame {
         for (Movement movement : var.getMovements()) {
 
             switch (movement.getType()) {
+
                 case "MouseMove": {
 
                     Point point = (Point) movement.getMovement();
@@ -214,7 +217,7 @@ public class Menu extends JFrame {
 
                     break;
                 }
-                case "KeyBoard":
+                case "KeyPress":
 
                     try {
 
@@ -227,36 +230,6 @@ public class Menu extends JFrame {
 
                     } catch (Exception exc) {
                         System.err.println("Keyboard button not recognised!");
-                    }
-
-                    break;
-                case "KeyCombo":
-
-                    try {
-
-                        ArrayList<Integer> keyCombo = (ArrayList<Integer>) movement.getMovement();
-
-                        for (int i = 0; i < keyCombo.size(); i++) {
-
-                            robot.keyPress(Main.keyboard.get(keyCombo.get(i)));
-
-                        }
-
-                        robot.delay(500);
-
-                        for (int i = keyCombo.size() - 1; i >= 0; i--) {
-
-                            robot.keyRelease(Main.keyboard.get(keyCombo.get(i)));
-
-                        }
-
-                        holdButton = false;
-
-                        robot.delay(500);
-
-                    } catch (Exception e) {
-                        System.err.println("Keyboard combo not recognized!");
-                        e.printStackTrace();
                     }
                     break;
             }

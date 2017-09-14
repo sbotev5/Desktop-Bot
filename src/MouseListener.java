@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class MouseListener extends NativeMouseInputAdapter {
 
-
     public void nativeMouseReleased(NativeMouseEvent e) {
 
         if (Menu.shouldRecord) {

@@ -20,10 +20,11 @@ public class RecordingStatsFrame extends JFrame {
     private JButton setTime;
     private Menu menu;
 
-
     RecordingStatsFrame(Menu menu) {
+
         super("ENTER RECORDING DETAILS");
         this.menu = menu;
+
     }
 
     void initialize() {
