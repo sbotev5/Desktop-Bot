@@ -7,5 +7,4 @@ Upon launching, the program starts a GUI which is used by the user to record mov
 
 Additionally, the user has an option to save a specific set of movements on a file and load it later from a file chooser.
 
-Jar file (for demo) and source code included.
 
