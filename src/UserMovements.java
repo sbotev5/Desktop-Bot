@@ -15,7 +15,7 @@ class UserMovements {
     // A Map would allow for recognizing different movement types (mouse move, click , key press etc) but does not allow duplicate keys
     // Additionally, having it as a class allows for better structure and better pairing of irrelevant data to the actual movements themselves
     // (name, duration and time are not connected to the actual set of movements but to the recording itself)
-    // The JPanel that is used to show the recording on the GUI is stored here in order to remove the correct one
+    // The JPanel that is used to show the recording on the GUI is stored here in order to remove the correct one once it is done
 
     UserMovements(String name, int hour, int minute, long duration, ArrayList<Movement> movements, JPanel panelGUI) {
 
