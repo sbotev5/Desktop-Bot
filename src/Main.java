@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 
 public class Main {
 
-    private static Robot robot;
-    static Map<Integer, Integer> keyboard;
+    private static Robot robot;  // Robot class used to execute movements
+    static Map<Integer, Integer> keyboard; // store keys
 
     public static void main(String[] args) {
 
@@ -41,11 +41,11 @@ public class Main {
     }
 
     private static void setUpHook() {
-
+        // as per JNativeHook demos
         LogManager.getLogManager().reset();
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.OFF);
-
+        
         try {
 
             GlobalScreen.registerNativeHook();
