@@ -9,7 +9,7 @@ public class MouseListener extends NativeMouseInputAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.currentRecording.add(new Movement("MouseButton", e.getButton()));
+            Menu.singleRecording.add(new Movement("MouseButton", e.getButton()));
 
         }
     }
@@ -18,7 +18,7 @@ public class MouseListener extends NativeMouseInputAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.currentRecording.add(new Movement("MouseMove", new Point(e.getX(), e.getY())));
+            Menu.singleRecording.add(new Movement("MouseMove", new Point(e.getX(), e.getY())));
 
         }
 
@@ -28,7 +28,7 @@ public class MouseListener extends NativeMouseInputAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.currentRecording.add(new Movement("MouseDrag", new Point(e.getX(), e.getY())));
+            Menu.singleRecording.add(new Movement("MouseDrag", new Point(e.getX(), e.getY())));
 
         }
     }

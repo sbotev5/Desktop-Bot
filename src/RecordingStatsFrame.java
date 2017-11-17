@@ -6,7 +6,7 @@ import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class RecordingStatsFrame extends JFrame {
@@ -42,7 +42,7 @@ public class RecordingStatsFrame extends JFrame {
         minute = new JSpinner();
         name = new JTextField();
 
-        int[] stats = getRecordingStats(Menu.currentRecording);
+        int[] stats = getRecordingStats(Menu.singleRecording);
 
         // Formatting JSpinners to not accepting anything apart from numbers
 
@@ -93,7 +93,7 @@ public class RecordingStatsFrame extends JFrame {
 
             long recordingDuration = TimeUnit.NANOSECONDS.toSeconds(Menu.stopTime); //storing the duration
 
-            for (UserMovements um : Menu.saveUserMovements) {  // checking for a time clash with already existing recordings
+            for (Recording um : Menu.allUserRecordings) {  // checking for a time clash with already existing recordings
 
                 if (um.getHour() == (int) hour.getValue() && um.getMinute() == (int) minute.getValue()) {
                     timeClash = true;
@@ -118,7 +118,7 @@ public class RecordingStatsFrame extends JFrame {
                 singleRecording.setLayout(new GridLayout(8, 1));
                 singleRecording.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 
-                UserMovements singleUser = new UserMovements(name.getText(), (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.currentRecording, singleRecording);
+                Recording singleUser = new Recording(name.getText(), (int) hour.getValue(), (int) minute.getValue(), recordingDuration, Menu.singleRecording, singleRecording);
 
                 JLabel name = new JLabel("Recording Name : " + singleUser.getName(), SwingConstants.CENTER);
                 JLabel timeForExecution = new JLabel("Time for execution : " + singleUser.getHour() + ":" + singleUser.getMinute(), SwingConstants.CENTER);
@@ -142,9 +142,9 @@ public class RecordingStatsFrame extends JFrame {
                 JButton remove = new JButton("Remove Recording");
 
                 remove.addActionListener(e1 -> {
-                    synchronized (Menu.saveUserMovements) {
+                    synchronized (Menu.allUserRecordings) {
 
-                        Menu.saveUserMovements.remove(singleUser);
+                        Menu.allUserRecordings.remove(singleUser);
 
                         menu.getRecordings().remove(singleRecording); //updating GUI
                         menu.getRecordings().revalidate();
@@ -167,9 +167,9 @@ public class RecordingStatsFrame extends JFrame {
 
                 menu.getRecordings().add(singleRecording);
 
-                Menu.saveUserMovements.add(singleUser);
+                Menu.allUserRecordings.add(singleUser);
 
-                Menu.currentRecording = null;
+                Menu.singleRecording = null;
 
                 dispose();
 
@@ -197,7 +197,7 @@ public class RecordingStatsFrame extends JFrame {
 
                 dispose();
 
-                Menu.currentRecording = null;
+                Menu.singleRecording = null;
 
                 menu.getRecord().setEnabled(true);
                 menu.getStopRecord().setEnabled(true);
@@ -209,9 +209,9 @@ public class RecordingStatsFrame extends JFrame {
         setVisible(true);
     }
 
-    private int[] getRecordingStats(ArrayList<Movement> var) {
+    private int[] getRecordingStats(List<Movement> var) {
 
-        // used to generate some stats about the recording just as an extra
+        // used to generate some stats about the recording as a feature
 
         int[] stats = new int[3];
 
@@ -226,7 +226,7 @@ public class RecordingStatsFrame extends JFrame {
                 case "MouseDrag":
                 case "WheelMove":
 
-                    howManyMovements++;
+                    howManyMovements++; // TODO: Optimize as  total entries -  mouse button plus key presses
 
                     break;
                 case "KeyPress":
@@ -249,7 +249,7 @@ public class RecordingStatsFrame extends JFrame {
         return stats;
     }
 
-    private void saveRecording(String name, ArrayList<Movement> recording) {
+    private void saveRecording(String name, List<Movement> recording) {
 
         //used in order to have the option to save a recording as a serialized object, using its name to differentiate and avoid overwriting
 

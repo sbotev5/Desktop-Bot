@@ -7,7 +7,7 @@ public class KeyListener extends NativeKeyAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.currentRecording.add(new Movement("KeyPress", e.getKeyCode()));
+            Menu.singleRecording.add(new Movement("KeyPress", e.getKeyCode()));
 
         }
     }

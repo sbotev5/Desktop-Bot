@@ -24,8 +24,8 @@ public class Menu extends JFrame {
     static boolean shouldRecord;
     private static long startTime;  // start time and stop time used for duration of recording
     static long stopTime;
-    static List<UserMovements> saveUserMovements;  // keep user recordings here
-    static ArrayList<Movement> currentRecording;
+    static List<Recording> allUserRecordings;  // keep user recordings here
+    static List<Movement> singleRecording;
 
     private Robot robot;
 
@@ -39,8 +39,8 @@ public class Menu extends JFrame {
     void initialize() {   // code style
 
         new Thread(new MyThread()).start();
-        saveUserMovements = new ArrayList<>();
-        saveUserMovements = Collections.synchronizedList(saveUserMovements); // the ArrayList needs to be synced for thread safety
+        allUserRecordings = new LinkedList<>();
+        allUserRecordings = Collections.synchronizedList(allUserRecordings); //needs to be synced for thread safety
         shouldRecord = false;
 
         mainPanel = new JPanel();
@@ -72,7 +72,7 @@ public class Menu extends JFrame {
 
         record.addActionListener(e -> {     //use of lambdas
 
-            currentRecording = new ArrayList<>();
+            singleRecording = new LinkedList<>();
             startTime = System.nanoTime();
             shouldRecord = true;
 
@@ -83,11 +83,12 @@ public class Menu extends JFrame {
 
         stopRecord.addActionListener(e -> { // use of lambdas
 
-            if (currentRecording != null) {   // prevent user from not having a recording to stop
-
-                currentRecording.remove(currentRecording.size() - 1);  // the last click on "Stop Record" is not needed during playback
+            if (singleRecording != null) {   // prevent user from not having a recording to stop
 
                 shouldRecord = false;
+
+                singleRecording.remove(singleRecording.size() - 1); // the last click on "Stop Record" is not needed during playback
+
                 stopTime = System.nanoTime() - startTime;  // accurately duration
                 record.setEnabled(true);
                 loadRecording.setEnabled(true);
@@ -127,7 +128,7 @@ public class Menu extends JFrame {
             try {
                 // deserialize and store
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(selectedFile));
-                currentRecording = (ArrayList<Movement>) in.readObject();
+                singleRecording = (List<Movement>) in.readObject();
                 in.close();
                 new RecordingStatsFrame(this).initialize();
 
@@ -137,7 +138,7 @@ public class Menu extends JFrame {
         }
     }
 
-    private void executeMovements(UserMovements var) {   // when it is playback time this method goes through each movement and executes it
+    private void executeMovements(Recording var) {   // when it is playback time this method goes through each movement and executes it
 
         boolean holdButton = false;  // for mouse dragging; left mouse button hold
 
@@ -245,21 +246,22 @@ public class Menu extends JFrame {
 
                 LocalTime time = LocalTime.now(); //getting current time
 
-                if (!saveUserMovements.isEmpty()) {
+                if (!allUserRecordings.isEmpty()) {
 
-                    synchronized (saveUserMovements) {
+                    synchronized (allUserRecordings) {
 
-                        for (Iterator<UserMovements> listIT = saveUserMovements.iterator(); listIT.hasNext(); ) {
+                        for (Iterator<Recording> listIT = allUserRecordings.iterator(); listIT.hasNext(); ) {
 
-                            UserMovements forCheck = listIT.next();
+                            Recording forCheck = listIT.next();
 
                             if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
-
-                                setExtendedState(JFrame.ICONIFIED);
 
                                 record.setEnabled(false);
                                 stopRecord.setEnabled(false);
                                 loadRecording.setEnabled(false);
+
+
+                                setExtendedState(JFrame.ICONIFIED);
 
                                 executeMovements(forCheck);
 
