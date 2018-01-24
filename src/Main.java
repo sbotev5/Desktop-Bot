@@ -21,7 +21,7 @@ public class Main {
         setUpHook();
 
         try {
-//dr
+
             robot = new Robot();
 
         } catch (AWTException e) {

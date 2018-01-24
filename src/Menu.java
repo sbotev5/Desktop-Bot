@@ -204,7 +204,6 @@ public class Menu extends JFrame {
 
                     break;
                 case "MouseDrag": {
-
                     if (!holdButton) {   // in order to achieve the mouse drag effect during playback
                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                         holdButton = true;

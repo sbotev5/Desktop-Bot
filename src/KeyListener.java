@@ -7,9 +7,14 @@ public class KeyListener extends NativeKeyAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.singleRecording.add(new Movement("KeyPress", e.getKeyCode()));
-
+            if (NativeKeyEvent.getModifiersText(e.getModifiers()).contains("+")) {
+                //  System.out.println(NativeKeyEvent.getModifiersText(e.getModifiers()));
+                // System.out.println(e.getKeyCode() + "sus kombo");
+            } else {
+                // Menu.singleRecording.add(new Movement("KeyPress", e.getKeyCode()));
+                // System.out.println(e.isActionKey());
+                // System.out.println(e.getKeyCode() + "bez  kombo");
+            }
         }
     }
-
 }
