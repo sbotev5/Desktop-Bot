@@ -166,6 +166,7 @@ public class Menu extends JFrame {
                     robot.delay(300);
 
                     break;
+
                 case "MouseButton":
 
                     try {
@@ -203,6 +204,7 @@ public class Menu extends JFrame {
                     }
 
                     break;
+
                 case "MouseDrag": {
                     if (!holdButton) {   // in order to achieve the mouse drag effect during playback
                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -217,12 +219,35 @@ public class Menu extends JFrame {
 
                     break;
                 }
+
                 case "KeyPress":
 
                     try {
 
                         robot.keyPress(Main.keyboard.get(movement.getMovement()));
                         robot.keyRelease(Main.keyboard.get(movement.getMovement()));
+
+                        holdButton = false;
+
+                        robot.delay(500);
+                    } catch (Exception exc) {
+                        System.err.println("Keyboard button not recognised!");
+                    }
+                    break;
+
+                case "KeyCombo":
+
+                    LinkedList<Integer> whichModifiers = (LinkedList<Integer>) movement.getMovement();
+
+                    try {
+
+                        for (int i = 0; i < whichModifiers.size(); i++) {
+                            robot.keyPress(Main.keyboard.get(whichModifiers.get(i)));
+                        }
+
+                        for (int i = whichModifiers.size() - 1; i >= 0; i--) {
+                            robot.keyRelease(Main.keyboard.get(whichModifiers.get(i)));
+                        }
 
                         holdButton = false;
 

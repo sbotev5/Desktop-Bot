@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -229,11 +230,20 @@ public class RecordingStatsFrame extends JFrame {
                     howManyMovements++; // TODO: Optimize as  total entries -  mouse button plus key presses
 
                     break;
+
                 case "KeyPress":
 
                     howManyKeyPresses++;
 
                     break;
+
+                case "KeyCombo":
+
+                    LinkedList<Integer> comboModifiers = (LinkedList<Integer>) movement.getMovement();
+                    howManyKeyPresses += comboModifiers.size();
+
+                    break;
+
                 case "MouseButton":
 
                     howManyMouseClicks++;
