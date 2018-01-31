@@ -25,7 +25,7 @@ public class Menu extends JFrame {
     private JPanel mainPanel;
 
     static boolean shouldRecord;
-    private static long startTime;  // start time and stop time used for duration of recording
+    private static long startTime;  // start time and stop time used for duration of a recording
     static long stopTime;
     static List<Recording> allUserRecordings;  // keep user recordings here
     static List<Movement> singleRecording;
