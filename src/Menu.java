@@ -274,29 +274,32 @@ public class Menu extends JFrame {
 
                 if (!allUserRecordings.isEmpty()) {
 
-                    for (Iterator<Recording> listIT = allUserRecordings.iterator(); listIT.hasNext(); ) {
+                    synchronized (allUserRecordings) {
 
-                        Recording forCheck = listIT.next();
+                        for (Iterator<Recording> listIT = allUserRecordings.iterator(); listIT.hasNext(); ) {
 
-                        if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
+                            Recording forCheck = listIT.next();
 
-                            record.setEnabled(false);
-                            stopRecord.setEnabled(false);
-                            loadRecording.setEnabled(false);
+                            if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
+
+                                record.setEnabled(false);
+                                stopRecord.setEnabled(false);
+                                loadRecording.setEnabled(false);
 
 
-                            setExtendedState(JFrame.ICONIFIED);
+                                setExtendedState(JFrame.ICONIFIED);
 
-                            executeMovements(forCheck);
+                                executeMovements(forCheck);
 
-                            record.setEnabled(true);
-                            stopRecord.setEnabled(true);
-                            loadRecording.setEnabled(true);
+                                record.setEnabled(true);
+                                stopRecord.setEnabled(true);
+                                loadRecording.setEnabled(true);
 
-                            listIT.remove();
+                                listIT.remove();
 
-                            recordings.remove(forCheck.getPanelGUI());  // updating the GUI when the playback is done
-                            recordings.revalidate();
+                                recordings.remove(forCheck.getPanelGUI());  // updating the GUI when the playback is done
+                                recordings.revalidate();
+                            }
                         }
                     }
                 }
