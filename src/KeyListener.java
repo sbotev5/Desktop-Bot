@@ -26,14 +26,14 @@ public class KeyListener extends NativeKeyAdapter {
 
             if (NativeInputEvent.getModifiersText(e.getModifiers()).equals("")) {
 
-                Menu.singleRecording.add(new Movement("KeyPress", e.getKeyCode()));
+                Menu.singleRecording.add(new Movement<>("KeyPress", e.getKeyCode()));
 
             } else {
 
                 LinkedList<Integer> whichModifiers = resolveModifiers(e.getModifiers());
                 whichModifiers.add(e.getKeyCode());
 
-                Menu.singleRecording.add(new Movement("KeyCombo", whichModifiers));
+                Menu.singleRecording.add(new Movement<>("KeyCombo", whichModifiers));
             }
         }
     }

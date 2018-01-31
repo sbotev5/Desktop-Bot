@@ -7,7 +7,7 @@ public class MouseListener extends NativeMouseInputAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.singleRecording.add(new Movement("MouseButton", e.getButton()));
+            Menu.singleRecording.add(new Movement<>("MouseButton", e.getButton()));
 
         }
     }
@@ -16,7 +16,7 @@ public class MouseListener extends NativeMouseInputAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.singleRecording.add(new Movement("MouseMove", e.getPoint()));
+            Menu.singleRecording.add(new Movement<>("MouseMove", e.getPoint()));
 
         }
 
@@ -26,7 +26,7 @@ public class MouseListener extends NativeMouseInputAdapter {
 
         if (Menu.shouldRecord) {
 
-            Menu.singleRecording.add(new Movement("MouseDrag", e.getPoint()));
+            Menu.singleRecording.add(new Movement<>("MouseDrag", e.getPoint()));
 
         }
     }

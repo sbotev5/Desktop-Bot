@@ -8,8 +8,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+
 
 public class Menu extends JFrame {
 
@@ -38,9 +41,8 @@ public class Menu extends JFrame {
 
     void initialize() {   // code style
 
-        new Thread(new MyThread()).start();
-        allUserRecordings = new LinkedList<>();
-        allUserRecordings = Collections.synchronizedList(allUserRecordings); //needs to be synced for thread safety
+        new Thread(new TimeCheck()).start();
+        allUserRecordings = Collections.synchronizedList(new LinkedList<>()); //needs to be synced for thread safety
         shouldRecord = false;
 
         mainPanel = new JPanel();
@@ -115,7 +117,7 @@ public class Menu extends JFrame {
         jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         jfc.setMultiSelectionEnabled(false);
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Recording files", "ATrecording"); // custom extension
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Desktop Bot Recordings", "desktopbotFile"); // custom extension
         jfc.setAcceptAllFileFilterUsed(false);
         jfc.addChoosableFileFilter(filter);
 
@@ -241,8 +243,8 @@ public class Menu extends JFrame {
 
                     try {
 
-                        for (int i = 0; i < whichModifiers.size(); i++) {
-                            robot.keyPress(Main.keyboard.get(whichModifiers.get(i)));
+                        for (Integer whichModifier : whichModifiers) {
+                            robot.keyPress(Main.keyboard.get(whichModifier));
                         }
 
                         for (int i = whichModifiers.size() - 1; i >= 0; i--) {
@@ -261,7 +263,7 @@ public class Menu extends JFrame {
         }
     }
 
-    private class MyThread implements Runnable {
+    private class TimeCheck implements Runnable {
 
         @Override
         public void run() {   //constantly checks if a recording should be executed
@@ -272,32 +274,29 @@ public class Menu extends JFrame {
 
                 if (!allUserRecordings.isEmpty()) {
 
-                    synchronized (allUserRecordings) {
+                    for (Iterator<Recording> listIT = allUserRecordings.iterator(); listIT.hasNext(); ) {
 
-                        for (Iterator<Recording> listIT = allUserRecordings.iterator(); listIT.hasNext(); ) {
+                        Recording forCheck = listIT.next();
 
-                            Recording forCheck = listIT.next();
+                        if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
 
-                            if (forCheck.getHour() == time.getHour() && forCheck.getMinute() == time.getMinute()) {
-
-                                record.setEnabled(false);
-                                stopRecord.setEnabled(false);
-                                loadRecording.setEnabled(false);
+                            record.setEnabled(false);
+                            stopRecord.setEnabled(false);
+                            loadRecording.setEnabled(false);
 
 
-                                setExtendedState(JFrame.ICONIFIED);
+                            setExtendedState(JFrame.ICONIFIED);
 
-                                executeMovements(forCheck);
+                            executeMovements(forCheck);
 
-                                record.setEnabled(true);
-                                stopRecord.setEnabled(true);
-                                loadRecording.setEnabled(true);
+                            record.setEnabled(true);
+                            stopRecord.setEnabled(true);
+                            loadRecording.setEnabled(true);
 
-                                listIT.remove();
+                            listIT.remove();
 
-                                recordings.remove(forCheck.getPanelGUI());  // updating the GUI when the playback is done
-                                recordings.revalidate();
-                            }
+                            recordings.remove(forCheck.getPanelGUI());  // updating the GUI when the playback is done
+                            recordings.revalidate();
                         }
                     }
                 }

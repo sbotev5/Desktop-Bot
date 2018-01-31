@@ -8,7 +8,7 @@ public class MouseWheelListener implements NativeMouseWheelListener {
 
         if (Menu.shouldRecord) {
 
-            Menu.singleRecording.add(new Movement("WheelMove", e.getWheelRotation()));
+            Menu.singleRecording.add(new Movement<>("WheelMove", e.getWheelRotation()));
 
         }
     }

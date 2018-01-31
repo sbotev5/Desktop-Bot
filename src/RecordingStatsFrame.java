@@ -143,13 +143,12 @@ public class RecordingStatsFrame extends JFrame {
                 JButton remove = new JButton("Remove Recording");
 
                 remove.addActionListener(e1 -> {
-                    synchronized (Menu.allUserRecordings) {
 
-                        Menu.allUserRecordings.remove(singleUser);
+                    Menu.allUserRecordings.remove(singleUser);
 
-                        menu.getRecordings().remove(singleRecording); //updating GUI
-                        menu.getRecordings().revalidate();
-                    }
+                    menu.getRecordings().remove(singleRecording); //updating GUI
+                    menu.getRecordings().revalidate();
+
                 });
 
                 JButton save = new JButton("Save Recording");
@@ -227,7 +226,7 @@ public class RecordingStatsFrame extends JFrame {
                 case "MouseDrag":
                 case "WheelMove":
 
-                    howManyMovements++; // TODO: Optimize as  total entries -  mouse button plus key presses
+                    howManyMovements++;
 
                     break;
 
@@ -265,7 +264,7 @@ public class RecordingStatsFrame extends JFrame {
 
         try {
 
-            FileOutputStream fileOut = new FileOutputStream(name + ".ATrecording");
+            FileOutputStream fileOut = new FileOutputStream(name + ".desktopbotFile");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(recording);
