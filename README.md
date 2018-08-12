@@ -1,5 +1,5 @@
 # Desktop Bot
-A simple console program that mimics user actions on the OS level.
+A simple program that mimics user actions on the OS level.
 
 This is a task I wanted to do in my spare time for practice/fun while trying to create a simple improvised implementation of a desktop bot. Since using only raw Java code to accomplish this is impossible I used the JNativeHook library which can be found here: https://github.com/kwhat/jnativehook
 
